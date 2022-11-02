@@ -19,10 +19,12 @@ export default createGlobalStyle`
         box-sizing:border-box;
         font-family: 'Roboto', sans-serif;
     }
+
     body,html{
     width: 100vw;
     height: 100vh;
   }
+  
   ul,li {
     list-style: none;
   }
