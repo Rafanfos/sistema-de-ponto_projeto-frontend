@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
+import { DashboardTrainer } from "../pages/DashboardTrainer";
 
 const RoutesMain = () => {
   return (
     <Routes>
-      <Route />
+      <Route path="/" element={<DashboardTrainer />}/>
       <Route />
       <Route />
     </Routes>
