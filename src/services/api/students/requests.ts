@@ -24,12 +24,13 @@ export const getCheckInStudent = async (
 };
 
 export const checkInStudent = async (
-    dataInput: iCheckInStudentProps
+    dataInput: iCheckInStudentProps,
+    userId: number
 ): Promise<iCheckInStudentResponse> => {
-    const { data } = await api.post<iCheckInStudentResponse>(
-        "/checkin",
-        dataInput
-    );
+    const { data } = await api.post<iCheckInStudentResponse>("/checkin", {
+        ...dataInput,
+        userId: userId,
+    });
     return data;
 };
 

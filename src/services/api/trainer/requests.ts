@@ -2,6 +2,7 @@ import api from "../api";
 import {
     iAddStudentProps,
     iAddStudentResponse,
+    iCheckInTrainerProps,
     iCheckInTrainerResponse,
     iEditTrainerInfoProps,
     iEditTrainerInfoResponse,
@@ -9,8 +10,14 @@ import {
     iGetTrainerInfoResponse,
 } from "./interfaces";
 
-export const checkInTrainer = async (): Promise<iCheckInTrainerResponse> => {
-    const { data } = await api.post<iCheckInTrainerResponse>("/checkin");
+export const checkInTrainer = async (
+    dataCheckIn: iCheckInTrainerProps,
+    userId: number
+): Promise<iCheckInTrainerResponse> => {
+    const { data } = await api.post<iCheckInTrainerResponse>("/checkin", {
+        ...dataCheckIn,
+        userId: userId,
+    });
     return data;
 };
 

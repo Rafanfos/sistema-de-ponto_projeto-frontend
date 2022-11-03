@@ -1,6 +1,19 @@
 import { iCheckInStudentResponse } from "../students/interfaces";
 
+export interface iCheckInTrainerProps {
+    shedule: string;
+    day: number;
+    month: number;
+    year: number;
+    status: string;
+}
 export interface iCheckInTrainerResponse extends iCheckInStudentResponse {}
+
+export interface iAddStudentProps {
+    email: string;
+    name: string;
+    course_module: string;
+}
 
 export interface iAddStudentResponse {
     email: string;
@@ -8,12 +21,6 @@ export interface iAddStudentResponse {
     course_module: string;
     id: number;
     userId: number;
-}
-
-export interface iAddStudentProps {
-    email: string;
-    name: string;
-    course_module: string;
 }
 
 export interface iGetStudentsResponse {

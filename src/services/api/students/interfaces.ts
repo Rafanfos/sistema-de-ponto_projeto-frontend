@@ -6,6 +6,15 @@ export interface iGetStudentInfoResponse {
     userId: number;
 }
 
+export interface iCheckInStudentProps {
+    schedule: string;
+    day: number;
+    month: number;
+    year: number;
+    status: string;
+    impediments: boolean;
+    currentTask: string;
+}
 export interface iCheckInStudentResponse {
     schedule: string;
     day: number;
@@ -15,16 +24,6 @@ export interface iCheckInStudentResponse {
     impediments: boolean;
     id: number;
     userId: number;
-}
-
-export interface iCheckInStudentProps {
-    schedule: string;
-    day: number;
-    month: number;
-    year: number;
-    status: string;
-    impediments: boolean;
-    currentTask: string;
 }
 
 export interface iEditStudentInfoProps {
