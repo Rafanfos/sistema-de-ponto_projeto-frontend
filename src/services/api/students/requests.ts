@@ -9,7 +9,7 @@ import {
 
 export const getStudentInfo = async (userId: number) => {
     const { data } = await api.get<iGetStudentInfoResponse>(
-        `/users?userId=${userId}`
+        `users?userId=${userId}`
     );
     return data;
 };
@@ -18,18 +18,19 @@ export const getCheckInStudent = async (
     userId: number
 ): Promise<iCheckInStudentResponse> => {
     const { data } = await api.get<iCheckInStudentResponse>(
-        `/checkin?userId=${userId}`
+        `checkin?userId=${userId}`
     );
     return data;
 };
 
 export const checkInStudent = async (
-    dataInput: iCheckInStudentProps
+    dataInput: iCheckInStudentProps,
+    userId: number
 ): Promise<iCheckInStudentResponse> => {
-    const { data } = await api.post<iCheckInStudentResponse>(
-        "/checkin",
-        dataInput
-    );
+    const { data } = await api.post<iCheckInStudentResponse>("checkin", {
+        ...dataInput,
+        userId: userId,
+    });
     return data;
 };
 
