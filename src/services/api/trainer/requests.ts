@@ -14,7 +14,7 @@ export const checkInTrainer = async (
     dataCheckIn: iCheckInTrainerProps,
     userId: number
 ): Promise<iCheckInTrainerResponse> => {
-    const { data } = await api.post<iCheckInTrainerResponse>("/checkin", {
+    const { data } = await api.post<iCheckInTrainerResponse>("checkin", {
         ...dataCheckIn,
         userId: userId,
     });
@@ -24,22 +24,19 @@ export const checkInTrainer = async (
 export const addStudent = async (
     dataInput: iAddStudentProps
 ): Promise<iAddStudentResponse> => {
-    const { data } = await api.post<iAddStudentResponse>(
-        "/students",
-        dataInput
-    );
+    const { data } = await api.post<iAddStudentResponse>("students", dataInput);
     return data;
 };
 
 export const deleteStudent = async (id: number) => {
-    await api.delete<void>(`/students/${id}`);
+    await api.delete<void>(`students/${id}`);
 };
 
 export const getStudents = async (
     userId: number
 ): Promise<iGetStudentsResponse[]> => {
     const { data } = await api.get<iGetStudentsResponse[]>(
-        `/students?${userId}`
+        `students?${userId}`
     );
     return data;
 };
@@ -48,7 +45,7 @@ export const getTrainerInfo = async (
     userId: number
 ): Promise<iGetTrainerInfoResponse> => {
     const { data } = await api.get<iGetTrainerInfoResponse>(
-        `/users?userId=${userId}`
+        `users?userId=${userId}`
     );
     return data;
 };
@@ -58,7 +55,7 @@ export const editTrainerInfo = async (
     dataInput: iEditTrainerInfoProps
 ): Promise<iEditTrainerInfoResponse> => {
     const { data } = await api.patch<iEditTrainerInfoResponse>(
-        `/users/${id}`,
+        `users/${id}`,
         dataInput
     );
     return data;
