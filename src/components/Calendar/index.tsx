@@ -35,6 +35,7 @@ export default function CalendarWindow({callback}:ICalendarWindowProps) {
     } else {
       setIsFirstRender(true)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[calendarDate])
 
 
