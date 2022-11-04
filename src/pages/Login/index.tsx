@@ -6,9 +6,8 @@ import { toast } from "react-toastify";
 import { CiMail } from "react-icons/ci";
 import { FiKey } from "react-icons/fi";
 import { BsCheck, BsEye, BsEyeSlash } from "react-icons/bs";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { UserContext } from "../../context/UserContext";
 import { IGetStudentInfoResponse } from "../../services/api/students/interfaces";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/api/commom/requests";
@@ -33,8 +32,6 @@ export interface ILoginForm {
 }
 
 const Login = () => {
-  const { isTrainer, setIsTrainer } = useContext(UserContext);
-
   const [viewPassword, setViewPassword] = useState(false);
   const [typeInputPassword, setTypeInputPassword] = useState("password");
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
@@ -44,17 +41,13 @@ const Login = () => {
   const onSubmit = async (dataInput: ILoginProps) => {
     try {
       const data = await login(dataInput);
-      localStorage.setItem("@Token", data.accessToken);
-      setIsTrainer(data.user.is_trainer);
-      toast.success("Usuário Logado");
-      if (isTrainer) {
-        navigate("/dashboard_instrutor", { replace: true });
-      } else {
-        navigate("/dashboard_aluno", { replace: true });
-      }
+      keepLoggedIn && localStorage.setItem("@Token", data.accessToken);
+
+      data.user.is_trainer
+        ? navigate("/dashboard_instrutor", { replace: true })
+        : navigate("/dashboard_aluno", { replace: true });
     } catch (error) {
       toast.error("Usuário ou senha inválidos");
-      console.error(error);
     }
   };
 
