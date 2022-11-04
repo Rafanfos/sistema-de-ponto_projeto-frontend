@@ -41,7 +41,7 @@ const Login = () => {
   const onSubmit = async (dataInput: ILoginProps) => {
     try {
       const data = await login(dataInput);
-      keepLoggedIn && localStorage.setItem("@Token", data.accessToken);
+      localStorage.setItem("@Token", data.accessToken);
 
       data.user.is_trainer
         ? navigate("/dashboard_instrutor", { replace: true })

@@ -6,10 +6,18 @@ export interface IUserContextData {
   setCheckinShedule: Dispatch<SetStateAction<ICheckinData[]>>;
   isTrainer: boolean;
   setIsTrainer: Dispatch<SetStateAction<boolean>>;
-  isDisable: boolean;
-  setIsDisable: Dispatch<SetStateAction<boolean>>;
-  checkinVerification: (difference: number) => boolean;
-  checkoutVerification: (difference: number) => boolean;
+  isDisable: {
+    checkin: boolean;
+    checkout: boolean;
+  };
+  setIsDisable: Dispatch<
+    SetStateAction<{
+      checkin: boolean;
+      checkout: boolean;
+    }>
+  >;
+  checkinVerification: (difference: number) => void;
+  checkoutVerification: (difference: number) => void;
 }
 
 export interface ICheckinData {
@@ -24,23 +32,22 @@ export const UserContext = createContext<IUserContextData>(
 const UserProviders = ({ children }: IProvidersProps) => {
   const [checkinShedule, setCheckinShedule] = useState<ICheckinData[]>([]);
   const [isTrainer, setIsTrainer] = useState(false);
-  const [isDisable, setIsDisable] = useState(false);
+  const [isDisable, setIsDisable] = useState({
+    checkin: false,
+    checkout: true,
+  });
 
   const checkinVerification = (difference: number) => {
-    if (difference - 9 > 15 / 60) {
-      console.log("faltou");
-      return true;
-    } else {
-      return false;
+    if (difference > 30) {
+      setIsDisable({ ...isDisable, checkin: true });
     }
   };
 
   const checkoutVerification = (difference: number) => {
-    if (difference - 14 > 15 / 60) {
-      console.log("faltou");
-      return true;
+    if (difference < 30) {
+      setIsDisable({ checkin: true, checkout: false });
     } else {
-      return false;
+      setIsDisable({ checkin: true, checkout: true });
     }
   };
 

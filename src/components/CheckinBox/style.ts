@@ -60,6 +60,11 @@ export const CheckinBoxStyle = styled.div`
           transition: 0.9s;
           background-color: var(--color-secondary);
         }
+
+        &:disabled {
+          background-color: var(--grey-3);
+          color: var(--grey-2);
+        }
       }
 
       &:first-child {
@@ -88,7 +93,8 @@ export const CheckinBoxStyle = styled.div`
         align-items: center;
         justify-content: center;
 
-        h3, p {
+        h3,
+        p {
           font-size: 18px;
           font-weight: 500;
           margin-right: 6px;
