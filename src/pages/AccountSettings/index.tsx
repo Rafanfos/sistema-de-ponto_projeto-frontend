@@ -1,6 +1,6 @@
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { AccountSettingsStyle } from "./style";
-import { EditFormName } from "../../components/EditForm";
+import { EditForm } from "../../components/EditForm";
 
 export const AccountSettings = () => {
 
@@ -13,7 +13,7 @@ export const AccountSettings = () => {
 
           <h2>Alterar dados do perfil</h2>
 
-          <EditFormName />
+          <EditForm />
         </div>
       </AccountSettingsStyle>
     </>

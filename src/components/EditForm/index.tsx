@@ -14,7 +14,7 @@ const nameEdit = yup.object().shape({
     .oneOf([yup.ref("email")], "Os e-mails devem ser correspondentes"),
 });
 
-export const EditFormName = () => {
+export const EditForm = () => {
   const {
     register,
     watch,
