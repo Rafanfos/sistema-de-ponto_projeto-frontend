@@ -37,3 +37,4 @@ export interface IGetStudentsResponse {
 export interface IGetTrainerInfoResponse extends IGetStudentsResponse {}
 
 export interface IEditTrainerInfoProps extends IEditStudentInfoProps {}
+
