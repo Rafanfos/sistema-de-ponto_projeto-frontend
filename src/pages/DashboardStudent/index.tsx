@@ -8,32 +8,31 @@ import { UserContext } from "../../context/UserContext";
 import { DashboardStudentStyle } from "./style";
 
 export const DashboardStudent = () => {
-  const { checkinVerification, checkoutVerification} =
-    useContext(UserContext);
+    const { checkinVerification } = useContext(UserContext);
 
-  
+    useEffect(() => {
+        const date = new Date();
+        const time = date.getMinutes();
+        let difference = 0;
+        const checkinTime = 9 * 60;
+        const checkoutTime = 14 * 60;
+        if (time >= checkinTime && time < checkoutTime) {
+            difference = time - checkinTime;
+        } else {
+            difference = time - checkoutTime;
+        }
+        checkinVerification(difference);
+    });
 
-  useEffect(() => {
-    const date = new Date();
-    const time = date.getHours();
-    const difference = 0;
-
-    if (time >= 9 && time < 14) {
-      checkinVerification(difference);
-    } else {
-      checkoutVerification(difference);
-    }
-  });
-
-  return (
-    <DashboardStudentStyle>
-      <AsideBar />
-      <div className="containerMain">
-        <HeaderDashboard />
-        <CheckinBox />
-        <StudentAttendance />
-        <UserTable />
-      </div>
-    </DashboardStudentStyle>
-  );
+    return (
+        <DashboardStudentStyle>
+            <AsideBar />
+            <div className="containerMain">
+                <HeaderDashboard />
+                <CheckinBox />
+                <StudentAttendance />
+                <UserTable />
+            </div>
+        </DashboardStudentStyle>
+    );
 };
