@@ -29,8 +29,8 @@ export interface IAddStudentResponse {
 export interface IGetStudentsResponse {
   email: string;
   name: string;
-  course_module: string;
   id: number;
+  studentId: number;
   userId: number;
 }
 
