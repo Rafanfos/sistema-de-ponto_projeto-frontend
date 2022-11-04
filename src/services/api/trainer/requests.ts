@@ -1,62 +1,56 @@
 import api from "../api";
 import {
-    iAddStudentProps,
-    iAddStudentResponse,
-    iCheckInTrainerProps,
-    iCheckInTrainerResponse,
-    iEditTrainerInfoProps,
-    iEditTrainerInfoResponse,
-    iGetStudentsResponse,
-    iGetTrainerInfoResponse,
+  IAddStudentProps,
+  IAddStudentResponse,
+  ICheckInTrainerProps,
+  ICheckInTrainerResponse,
+  IEditTrainerInfoProps,
+  IGetStudentsResponse,
+  IGetTrainerInfoResponse,
 } from "./interfaces";
 
 export const checkInTrainer = async (
-    dataCheckIn: iCheckInTrainerProps,
-    userId: number
-): Promise<iCheckInTrainerResponse> => {
-    const { data } = await api.post<iCheckInTrainerResponse>("checkin", {
-        ...dataCheckIn,
-        userId: userId,
-    });
-    return data;
+  dataCheckIn: ICheckInTrainerProps,
+  userId: number
+): Promise<ICheckInTrainerResponse> => {
+  const { data } = await api.post<ICheckInTrainerResponse>("checkin", {
+    ...dataCheckIn,
+    userId: userId,
+  });
+  return data;
 };
 
 export const addStudent = async (
-    dataInput: iAddStudentProps
-): Promise<iAddStudentResponse> => {
-    const { data } = await api.post<iAddStudentResponse>("students", dataInput);
-    return data;
+  dataInput: IAddStudentProps
+): Promise<IAddStudentResponse> => {
+  const { data } = await api.post<IAddStudentResponse>("students", dataInput);
+  return data;
 };
 
 export const deleteStudent = async (id: number) => {
-    await api.delete<void>(`students/${id}`);
+  await api.delete<void>(`students/${id}`);
 };
 
 export const getStudents = async (
-    userId: number
-): Promise<iGetStudentsResponse[]> => {
-    const { data } = await api.get<iGetStudentsResponse[]>(
-        `students?${userId}`
-    );
-    return data;
+  userId: number
+): Promise<IGetStudentsResponse[]> => {
+  const { data } = await api.get<IGetStudentsResponse[]>(`students?${userId}`);
+  return data;
 };
 
 export const getTrainerInfo = async (
-    userId: number
-): Promise<iGetTrainerInfoResponse> => {
-    const { data } = await api.get<iGetTrainerInfoResponse>(
-        `users?userId=${userId}`
-    );
-    return data;
+  userId: number
+): Promise<IGetTrainerInfoResponse> => {
+  const { data } = await api.get<IGetTrainerInfoResponse>(
+    `users?userId=${userId}`
+  );
+  return data;
 };
 
 export const editTrainerInfo = async (
-    id: number,
-    dataInput: iEditTrainerInfoProps
-): Promise<iEditTrainerInfoResponse> => {
-    const { data } = await api.patch<iEditTrainerInfoResponse>(
-        `users/${id}`,
-        dataInput
-    );
-    return data;
+  id: number,
+  dataInput: IEditTrainerInfoProps
+): Promise<void> => {
+  const { data } = await api.patch<void>(`users/${id}`, dataInput);
+  return data;
 };

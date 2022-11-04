@@ -1,46 +1,42 @@
 import api from "../api";
 import {
-    iCheckInStudentProps,
-    iCheckInStudentResponse,
-    iEditStudentInfoProps,
-    iEditStudentInfoResponse,
-    iGetStudentInfoResponse,
+  ICheckInStudentProps,
+  ICheckInStudentResponse,
+  IEditStudentInfoProps,
+  IGetStudentInfoResponse,
 } from "./interfaces";
 
 export const getStudentInfo = async (userId: number) => {
-    const { data } = await api.get<iGetStudentInfoResponse>(
-        `users?userId=${userId}`
-    );
-    return data;
+  const { data } = await api.get<IGetStudentInfoResponse>(
+    `users?userId=${userId}`
+  );
+  return data;
 };
 
 export const getCheckInStudent = async (
-    userId: number
-): Promise<iCheckInStudentResponse> => {
-    const { data } = await api.get<iCheckInStudentResponse>(
-        `checkin?userId=${userId}`
-    );
-    return data;
+  userId: number
+): Promise<ICheckInStudentResponse> => {
+  const { data } = await api.get<ICheckInStudentResponse>(
+    `checkin?userId=${userId}`
+  );
+  return data;
 };
 
 export const checkInStudent = async (
-    dataInput: iCheckInStudentProps,
-    userId: number
-): Promise<iCheckInStudentResponse> => {
-    const { data } = await api.post<iCheckInStudentResponse>("checkin", {
-        ...dataInput,
-        userId: userId,
-    });
-    return data;
+  dataInput: ICheckInStudentProps,
+  userId: number
+): Promise<ICheckInStudentResponse> => {
+  const { data } = await api.post<ICheckInStudentResponse>("checkin", {
+    ...dataInput,
+    userId: userId,
+  });
+  return data;
 };
 
 export const editStudentInfo = async (
-    id: number,
-    dataInput: iEditStudentInfoProps
-): Promise<iEditStudentInfoResponse> => {
-    const { data } = await api.patch<iEditStudentInfoResponse>(
-        `users/${id}`,
-        dataInput
-    );
-    return data;
+  id: number,
+  dataInput: IEditStudentInfoProps
+): Promise<void> => {
+  const { data } = await api.patch<void>(`users/${id}`, dataInput);
+  return data;
 };
