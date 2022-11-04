@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 import { CheckinBoxStyle } from "./style";
 
 export const CheckinBox = () => {
+  const { isDisable } = useContext(UserContext);
+
   return (
     <CheckinBoxStyle>
       <div className="checkinInfo">
@@ -21,10 +25,10 @@ export const CheckinBox = () => {
 
       <div className="checkinButton">
         <div>
-          <button>Checkin</button>
+          <button disabled={isDisable.checkin}>Checkin</button>
         </div>
         <div>
-          <button>Checkout</button>
+          <button disabled={isDisable.checkout}>Checkout</button>
         </div>
       </div>
     </CheckinBoxStyle>
