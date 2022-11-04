@@ -7,7 +7,7 @@ interface iInput {
   type?: string;
   value?: string;
   register?: UseFormRegisterReturn<string>;
-  validate?: UseFormRegisterReturn<string>;
+  disabled?: boolean;
 }
 
 export function InputDefault({ register, ...otherProps }: iInput) {
