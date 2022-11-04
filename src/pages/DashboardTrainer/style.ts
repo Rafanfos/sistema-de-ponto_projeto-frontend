@@ -46,9 +46,8 @@ export const DashboardTrainerStyle = styled.div`
     flex-direction: row;
 
     .containerMain {
-      width: 85;
       margin-left: 84px;
-      
+
       header {
         margin-top: 2.188rem;
 

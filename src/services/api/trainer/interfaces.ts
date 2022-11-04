@@ -36,15 +36,17 @@ export interface iGetTrainerInfoResponse {
     isTrainer: boolean;
     id: number;
     userId: number;
+    photo: string;
 }
 
 export interface iEditTrainerInfoProps {
     name: string;
     oldEmail: string;
-    newEmail: string;
+    email: string;
     confirmNewEmail: string;
-    // photo: string
+    photo: string;
 }
+
 export interface iEditTrainerInfoResponse {
     email: string;
     name: string;
