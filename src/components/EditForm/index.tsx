@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { iEditTrainerInfoProps } from "../../services/api/trainer/interfaces";
 
-const nameEdit = yup.object().shape({
+const schema = yup.object().shape({
   name: yup.string(),
   oldEmail: yup.string().email("Não é um e-mail válido"),
   email: yup.string().email("Não é um e-mail válido"),
@@ -21,7 +21,7 @@ export const EditForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<iEditTrainerInfoProps>({
-    resolver: yupResolver(nameEdit),
+    resolver: yupResolver(schema),
     mode: "onChange",
   });
 
