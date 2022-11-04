@@ -21,10 +21,10 @@ export const CheckinBox = () => {
 
       <div className="checkinButton">
         <div>
-          {/* <button onClick={isTrainer ? checkinTrainer:checkinStudent}>Checkin Realizado</button> */}
+          <button>Checkin</button>
         </div>
         <div>
-          <button>Fazer Checkin</button>
+          <button>Checkout</button>
         </div>
       </div>
     </CheckinBoxStyle>

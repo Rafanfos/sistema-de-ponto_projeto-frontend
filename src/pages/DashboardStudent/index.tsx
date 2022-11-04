@@ -8,7 +8,10 @@ import { UserContext } from "../../context/UserContext";
 import { DashboardStudentStyle } from "./style";
 
 export const DashboardStudent = () => {
-  const { checkinVerification, checkoutVerification } = useContext(UserContext);
+  const { checkinVerification, checkoutVerification} =
+    useContext(UserContext);
+
+  
 
   useEffect(() => {
     const date = new Date();
