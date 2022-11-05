@@ -28,13 +28,16 @@ export interface IAddStudentResponse {
 }
 
 export interface IGetStudentsResponse {
-    email: string;
-    name: string;
-    course_module: string;
-    id: number;
-    userId: number;
+
+  email: string;
+  name: string;
+  id: number;
+  studentId: number;
+  userId: number;
+
 }
 
 export interface IGetTrainerInfoResponse extends IGetStudentInfoResponse {}
 
 export interface IEditTrainerInfoProps extends IEditStudentInfoProps {}
+

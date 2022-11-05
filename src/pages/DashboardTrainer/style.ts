@@ -55,13 +55,17 @@ export const DashboardTrainerStyle = styled.div`
             width: 85;
             margin-left: 84px;
 
-            header {
-                margin-top: 2.188rem;
+    .containerMain {
+      margin-left: 84px;
 
-                h1 {
-                    font-weight: 500;
-                    font-size: 32px;
-                }
+      header {
+        margin-top: 2.188rem;
+
+        h1 {
+          font-weight: 500;
+          font-size: 32px;
+        }
+
 
                 div {
                     flex-direction: column;
