@@ -1,190 +1,165 @@
+import { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { VscCircleLargeOutline } from "react-icons/vsc";
-import { StudentsTableStyle } from "./style";
+import { FiTrash2 } from "react-icons/fi";
+import {
+  getCheckInStudents,
+  getStudents,
+} from "../../services/api/trainer/requests";
+import { ContainerStudentsStyle, StudentsTableStyle } from "./style";
+import { DeleteStudentModal } from "../DeleteStudentModal";
+import { AddStudentModal } from "../AddStudentModal";
+import api from "../../services/api/api";
+import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
 
 export const StudentsTable = () => {
-    return (
-        <StudentsTableStyle>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            <h4>Nome</h4>
-                            <button>
-                                <MdKeyboardArrowDown />
-                            </button>
-                        </th>
 
-                        <th>
-                            <h4>Último Registro</h4>
-                            <button>
-                                <MdKeyboardArrowUp />
-                            </button>
-                        </th>
+  const [studentsList, setStudentsList] = useState<
+    IRegisterCheckInStudentsProps[] | []
+  >([]);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [studentDelete, setStudentDelete] =
+    useState<IRegisterCheckInStudentsProps | null>(null);
+  const [isAddModal, setIsAddModal] = useState(false);
 
-                        <th>
-                            <h4>Impedimentos</h4>
-                            <button>
-                                <MdKeyboardArrowDown />
-                            </button>
-                        </th>
+  function handleClick(student: IRegisterCheckInStudentsProps) {
+    setIsDeleteModal(true);
+    setStudentDelete(student);
+  }
 
-                        <th>
-                            <h4>Nota de Presença</h4>
-                            <button>
-                                <MdKeyboardArrowDown />
-                            </button>
-                        </th>
+  useEffect(() => {
+    async function listStudents() {
+      // const userId = localStorage.getItem("@UserId")
+      const list = await getStudents(2);
 
-                        <th>
-                            <h4>Status</h4>
-                            <button>
-                                <MdKeyboardArrowDown />
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
+      list.map(async (student) => {
+        const listCheckIn = await getCheckInStudents(student.studentId);
+        const lastRegister = listCheckIn[listCheckIn.length - 1];
+        if (lastRegister) {
+          const { day, month, year, schedule } = lastRegister;
+          const lastRegisterDate = `${schedule} | ${day}/${month}/${year}`;
 
-                <tbody>
-                    <tr>
-                        <td>
-                            <VscCircleLargeOutline />
-                            <h3>Gabriel Garcia</h3>
-                        </td>
+          const lastRegisterImp = lastRegister.impediments;
+          await api.patch(`/students/${student.studentId}`, {
+            lastRegister: lastRegisterDate,
+            impediments: lastRegisterImp,
+          });
+        }
+      });
+    }
+    listStudents();
+  }, []);
 
-                        <td>
-                            <p>14:01 31/10/22</p>
-                        </td>
+  useEffect(() => {
+    const listStundents = async () => {
+      // const userId = localStorage.getItem("@UserId")
+      const students = await getStudents(2);
+      setStudentsList(students);
+    };
+    listStundents();
+  }, [studentsList]);
 
-                        <td>
-                            <p className="somethingWrong">Com impedimentos</p>
-                        </td>
+  return (
+    <>
+      {isDeleteModal ? (
+        <DeleteStudentModal
+          setIsDeleteModal={setIsDeleteModal}
+          studentDelete={studentDelete}
+          studentsList={studentsList}
+          setStudentsList={setStudentsList}
+        />
+      ) : null}
+      {isAddModal ? (
+        <AddStudentModal
+          setIsAddModal={setIsAddModal}
+          setStudentsList={setStudentsList}
+        />
+      ) : null}
+      <StudentsTableStyle>
+        <ContainerStudentsStyle>
+          <h2>Alunos</h2>
+          <button onClick={() => setIsAddModal(true)}>+</button>
+        </ContainerStudentsStyle>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <h4>Nome</h4>
+                <button>
+                  <MdKeyboardArrowDown />
+                </button>
+              </th>
 
-                        <td>
-                            <p className="allRigth">100%</p>
-                        </td>
+              <th>
+                <h4>Último Registro</h4>
+                <button>
+                  <MdKeyboardArrowUp />
+                </button>
+              </th>
 
-                        <td>
-                            <p className="allRigth">Conforme</p>
-                        </td>
-                    </tr>
+              <th>
+                <h4>Impedimentos</h4>
+                <button>
+                  <MdKeyboardArrowDown />
+                </button>
+              </th>
 
-                    <tr>
-                        <td>
-                            <VscCircleLargeOutline />
-                            <h3>Gabriel Ogawa</h3>
-                        </td>
+              <th>
+                <h4>Nota de Presença</h4>
+                <button>
+                  <MdKeyboardArrowDown />
+                </button>
+              </th>
 
-                        <td>
-                            <p>14:01 31/10/22</p>
-                        </td>
+              <th>
+                <h4>Status</h4>
+                <button>
+                  <MdKeyboardArrowDown />
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {studentsList &&
+              studentsList.map((student) => (
+                <tr key={student.id}>
+                  <td>
+                    <button onClick={() => handleClick(student)}>
+                      <FiTrash2 />
+                    </button>
+                    <VscCircleLargeOutline />
+                    <h3>{student.name}</h3>
+                  </td>
 
-                        <td>
-                            <p>Sem impedimentos</p>
-                        </td>
+                  <td>
+                    <p>{student.lastRegister ? student.lastRegister : "N/A"}</p>
+                  </td>
 
-                        <td>
-                            <p className="allRigth">100%</p>
-                        </td>
+                  <td>
+                    <p
+                      className={
+                        student.impediments ? "somethingWrong" : "allRigth"
+                      }
+                    >
+                      {student.impediments
+                        ? "Com impedimentos"
+                        : "Sem Impedimentos"}
+                    </p>
+                  </td>
 
-                        <td>
-                            <p className="allRigth">Conforme</p>
-                        </td>
-                    </tr>
+                  <td>
+                    <p className="allRigth">100%</p>
+                  </td>
 
-                    <tr>
-                        <td>
-                            <VscCircleLargeOutline />
-                            <h3>Leandro</h3>
-                        </td>
+                  <td>
+                    <p className="allRigth">Conforme</p>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </StudentsTableStyle>
+    </>
+  );
 
-                        <td>
-                            <p>14:01 31/10/22</p>
-                        </td>
-
-                        <td>
-                            <p>Sem impedimentos</p>
-                        </td>
-
-                        <td>
-                            <p className="allRigth">100%</p>
-                        </td>
-
-                        <td>
-                            <p className="allRigth">Conforme</p>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <VscCircleLargeOutline />
-                            <h3>Lucas Kauan</h3>
-                        </td>
-
-                        <td>
-                            <p>14:01 31/10/22</p>
-                        </td>
-
-                        <td>
-                            <p>Sem impedimentos</p>
-                        </td>
-
-                        <td>
-                            <p className="allRigth">92%</p>
-                        </td>
-
-                        <td>
-                            <p className="allRigth">Conforme</p>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <VscCircleLargeOutline />
-                            <h3>Lucas Magalhães</h3>
-                        </td>
-
-                        <td>
-                            <p>14:01 31/10/22</p>
-                        </td>
-
-                        <td>
-                            <p>Sem impedimentos</p>
-                        </td>
-
-                        <td>
-                            <p className="somethingWrong">67%</p>
-                        </td>
-
-                        <td>
-                            <p className="somethingWrong">Faltante</p>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <VscCircleLargeOutline />
-                            <h3>Rafael Barroso</h3>
-                        </td>
-
-                        <td>
-                            <p>14:01 31/10/22</p>
-                        </td>
-
-                        <td>
-                            <p>Sem impedimentos</p>
-                        </td>
-
-                        <td>
-                            <p className="somethingWrong">70%</p>
-                        </td>
-
-                        <td>
-                            <p className="somethingWrong">Faltante</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </StudentsTableStyle>
-    );
 };
