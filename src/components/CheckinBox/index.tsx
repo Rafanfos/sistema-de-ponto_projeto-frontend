@@ -1,53 +1,70 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
-import { checkInTrainer, getTrainerInfo } from "../../services/api/trainer/requests";
+import { IGetStudentInfoResponse } from "../../services/api/students/interfaces";
+import { checkInStudent } from "../../services/api/students/requests";
+import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
+import { checkInTrainer } from "../../services/api/trainer/requests";
 import { CheckinBoxStyle } from "./style";
 
-export const CheckinBox = () => {
-  const { isDisable } = useContext(UserContext);
-  const [statusCheckin, setStatusCheckin] = useState("")
-  
-  const checkin = async () => {
+interface ICheckinBoxProps {
+  infoTrainer?: IGetTrainerInfoResponse[];
+  infoStudent?: IGetStudentInfoResponse[];
+}
+
+interface IData {
+  impediments: boolean | null;
+  currentTask: string | null;
+}
+
+export const CheckinBox = ({ infoTrainer, infoStudent }: ICheckinBoxProps) => {
+  const { isDisable, isTrainer } = useContext(UserContext);
+  const [statusCheckin, setStatusCheckin] = useState("");
+
+  const checkin = async (
+    info: IGetTrainerInfoResponse[] | undefined,
+    data: IData
+  ) => {
+    const userId = Number(localStorage.getItem("@UserId"));
     const date = new Date();
-    const day = Number(date.getDate() - 1)
-    const month = Number(date.getMonth() + 1)
+    const day = Number(date.getDate() - 1);
+    const month = Number(date.getMonth() + 1);
     const currentAge = Number(date.getFullYear());
-    let hours = String(date.getHours())
-    let minutes = String(date.getMinutes())
+    let hours = String(date.getHours());
+    let minutes = String(date.getMinutes());
 
-    if(hours.length === 1){
-      hours = `0${hours}`
+    if (hours.length === 1) {
+      hours = `0${hours}`;
     }
-    if(minutes.length === 1){
-      minutes = `0${minutes}`
+    if (minutes.length === 1) {
+      minutes = `0${minutes}`;
     }
 
-    const completHour = `${hours}:${minutes}`
-    const userId = Number(localStorage.getItem("@UserId"))
-    const infoTrainer = await getTrainerInfo(userId)
+    const completHour = `${hours}:${minutes}`;
 
-    if(Number(hours) === 9 && Number(minutes) < 15){
-      setStatusCheckin('succeed')
-    }else if(Number(hours) >= 9 && Number(minutes) > 15){
-      setStatusCheckin("late")
-    }else if(Number(hours) === 18 && Number(minutes) < 15){
-      setStatusCheckin("succeed")
-    }else if(Number(hours) >= 18 && Number(minutes) > 15){
-      setStatusCheckin("late")
+    if (Number(hours) === 9 && Number(minutes) < 15) {
+      setStatusCheckin("succeed");
+    } else if (Number(hours) >= 9 && Number(minutes) > 15) {
+      setStatusCheckin("late");
+    } else if (Number(hours) === 18 && Number(minutes) < 15) {
+      setStatusCheckin("succeed");
+    } else if (Number(hours) >= 18 && Number(minutes) > 15) {
+      setStatusCheckin("late");
     }
-    
+
     const body = {
-      name: infoTrainer[0].name,
-      shedule: completHour,
+      name: info? info[0].name : null,
+      schedule: completHour,
       day: day,
       month: month,
       year: currentAge,
+      impediments: data.impediments,
+      currentTask: data.currentTask,
       status: statusCheckin,
-      userId: 2
-    }
+      userId: userId,
+    };
 
-    checkInTrainer(body, userId)
-  }
+    isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
+  };
 
   return (
     <CheckinBoxStyle>
@@ -69,14 +86,28 @@ export const CheckinBox = () => {
 
       <div className="checkinButton">
         <div>
-          <button disabled={isDisable.checkin} onClick={() => {
-            checkin()
-          }}>Checkin</button>
+          <button
+            disabled={isDisable.checkin}
+            onClick={() => {
+              isTrainer
+                ? checkin(infoTrainer, { impediments: null, currentTask: null })
+                : console.log(infoStudent);
+            }}
+          >
+            Checkin
+          </button>
         </div>
         <div>
-          <button disabled={isDisable.checkout} onClick={() => {
-            checkin()
-          }}>Checkout</button>
+          <button
+            disabled={isDisable.checkout}
+            onClick={() => {
+              isTrainer
+                ? checkin(infoTrainer, { impediments: null, currentTask: null })
+                : console.log(infoStudent);
+            }}
+          >
+            Checkout
+          </button>
         </div>
       </div>
     </CheckinBoxStyle>
