@@ -1,45 +1,48 @@
-import { iCheckInStudentResponse } from "../students/interfaces";
+import {
+  ICheckInStudentResponse,
+  IEditStudentInfoProps,
+} from "../students/interfaces";
 
-export interface iCheckInTrainerResponse extends iCheckInStudentResponse {}
+export interface ICheckInTrainerProps {
+  shedule: string;
+  day: number;
+  month: number;
+  year: number;
+  status: string;
+}
+export interface ICheckInTrainerResponse extends ICheckInStudentResponse {}
 
-export interface iAddStudentResponse {
-    email: string;
-    name: string;
-    course_module: string;
-    id: number;
-    userId: number;
+export interface IAddStudentProps {
+  email: string;
+  name: string;
+  userId: number;
+  studentId: number;
 }
 
-export interface iAddStudentProps {
-    email: string;
-    name: string;
-    course_module: string;
+export interface IAddStudentResponse {
+  email: string;
+  name: string;
+  course_module: string;
+  id: number;
+  userId: number;
 }
 
-export interface iGetStudentsResponse {
-    email: string;
-    name: string;
-    course_module: string;
-    id: number;
-    userId: number;
+export interface IGetStudentsResponse {
+  email: string;
+  name: string;
+  id: number;
+  studentId: number;
+  userId: number;
 }
 
-export interface iGetTrainerInfoResponse {
-    email: string;
-    isTrainer: boolean;
-    id: number;
-    userId: number;
-}
+export interface IGetTrainerInfoResponse extends IGetStudentsResponse {}
 
-export interface iEditTrainerInfoProps {
-    name: string;
-    oldEmail: string;
-    newEmail: string;
-    confirmNewEmail: string;
-    // photo: string
-}
-export interface iEditTrainerInfoResponse {
-    email: string;
-    name: string;
-    // photo:string;
+export interface IEditTrainerInfoProps extends IEditStudentInfoProps {}
+
+export interface IRegisterCheckInStudentsProps {
+  name: string;
+  id: number;
+  studentId: number;
+  lastRegister?: string;
+  impediments?: boolean;
 }

@@ -1,5 +1,48 @@
 import styled from "styled-components";
 
+export const ContainerStudentsStyle = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+
+  h2 {
+    color: var(--grey-1);
+    font-weight: 700;
+    font-size: 18px;
+    margin-right: 4px;
+
+    @media (min-width: 768px) {
+      font-size: 36px;
+    }
+  }
+
+  button {
+    width: 19px;
+    height: 19px;
+
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    border: none;
+
+    color: var(--color-light);
+    font-weight: 900;
+    font-size: 16px;
+    text-align: center;
+
+    @media (min-width: 768px) {
+      width: 39px;
+      height: 39px;
+      font-size: 32px;
+
+      &:hover {
+        transition: 0.9s;
+        background-color: var(--color-secondary);
+      }
+    }
+  }
+`;
+
 export const StudentsTableStyle = styled.div`
   margin-top: 1.875rem;
   overflow-x: auto;
@@ -110,6 +153,10 @@ export const StudentsTableStyle = styled.div`
 
           &:nth-child(5) {
             width: 130px;
+          }
+          button {
+            border: none;
+            background-color: transparent;
           }
         }
 
