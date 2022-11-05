@@ -44,7 +44,6 @@ const Login = () => {
         resolver: yupResolver(schema),
     });
 
-
     const navigate = useNavigate();
     const onSubmit = async (dataInput: ILoginProps) => {
         try {
