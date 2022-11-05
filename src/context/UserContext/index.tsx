@@ -1,10 +1,10 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 import { IProvidersProps } from "../../providers";
+import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
 
 export interface IUserContextData {
-
-checkinShedule: ICheckinData[];
-  setCheckinShedule: Dispatch<SetStateAction<ICheckinData[]>>;
+  checkinSchedule: ICheckinData;
+  setCheckinSchedule: Dispatch<SetStateAction<ICheckinData>>;
   isTrainer: boolean;
   setIsTrainer: Dispatch<SetStateAction<boolean>>;
   isDisable: {
@@ -19,26 +19,29 @@ checkinShedule: ICheckinData[];
   >;
   checkinVerification: (difference: number) => void;
   checkoutVerification: (difference: number) => void;
-
+  userInfo: IGetTrainerInfoResponse[];
+  setUserInfo: Dispatch<SetStateAction<IGetTrainerInfoResponse[]>>;
 }
 
 export interface ICheckinData {
-    start: string;
-    end: string;
+  start: string;
+  end: string;
 }
 
 export const UserContext = createContext<IUserContextData>(
-    {} as IUserContextData
+  {} as IUserContextData
 );
 
 const UserProviders = ({ children }: IProvidersProps) => {
-
-const [checkinShedule, setCheckinShedule] = useState<ICheckinData[]>([]);
+  const [checkinSchedule, setCheckinSchedule] = useState<ICheckinData>(
+    {} as ICheckinData
+  );
   const [isTrainer, setIsTrainer] = useState(false);
   const [isDisable, setIsDisable] = useState({
     checkin: false,
     checkout: true,
   });
+  const [userInfo, setUserInfo] = useState<IGetTrainerInfoResponse[]>([]);
 
   const checkinVerification = (difference: number) => {
     if (difference > 30) {
@@ -57,20 +60,21 @@ const [checkinShedule, setCheckinShedule] = useState<ICheckinData[]>([]);
   return (
     <UserContext.Provider
       value={{
-        checkinShedule,
-        setCheckinShedule,
+        checkinSchedule,
+        setCheckinSchedule,
         isTrainer,
         setIsTrainer,
         isDisable,
         setIsDisable,
         checkinVerification,
         checkoutVerification,
+        userInfo,
+        setUserInfo,
       }}
     >
       {children}
     </UserContext.Provider>
   );
-
 };
 
 export default UserProviders;

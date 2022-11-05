@@ -1,5 +1,4 @@
 export interface IGetStudentInfoResponse {
-
   email: string;
   name: string;
   is_trainer: boolean;
@@ -10,14 +9,16 @@ export interface IGetStudentInfoResponse {
 }
 
 export interface ICheckInStudentProps {
+  name: string;
   schedule: string;
   day: number;
   month: number;
   year: number;
   status: string;
-  impediments: boolean;
-  currentTask: string;
+  impediments: boolean | null;
+  currentTask: string | null;
 }
+
 export interface ICheckInStudentResponse {
   schedule: string;
   day: number;
@@ -25,6 +26,7 @@ export interface ICheckInStudentResponse {
   year: number;
   status: string;
   impediments: boolean;
+  currentTask: string | null;
   id: number;
   userId: number;
 }
@@ -33,5 +35,4 @@ export interface IEditStudentInfoProps {
   email: string;
   name: string;
   avatar: string;
-
 }
