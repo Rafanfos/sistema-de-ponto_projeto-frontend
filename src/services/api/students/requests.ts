@@ -7,7 +7,7 @@ import {
 } from "./interfaces";
 
 export const getStudentInfo = async (userId: number) => {
-  const { data } = await api.get<IGetStudentInfoResponse>(
+  const { data } = await api.get<IGetStudentInfoResponse[]>(
     `users?userId=${userId}`
   );
   return data;

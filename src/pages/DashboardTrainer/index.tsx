@@ -1,18 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { StudentsTable } from "../../components/ StudentsTable";
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
 import { UserContext } from "../../context/UserContext";
-import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
 import { getTrainerInfo } from "../../services/api/trainer/requests";
 import { DashboardTrainerStyle } from "./style";
 
-
 export const DashboardTrainer = () => {
-  const { checkinVerification, checkoutVerification } = useContext(UserContext);
-  const [infoTrainer, setInfoTrainer] = useState<IGetTrainerInfoResponse[]>([]);
-  
+  const {
+    checkinVerification,
+    checkoutVerification,
+    setCheckinSchedule,
+    setUserInfo,
+  } = useContext(UserContext);
+
   useEffect(() => {
+    setCheckinSchedule({ start: "09:00", end: "18:00" });
     const getDifference = () => {
       const date = new Date();
       const time = date.getHours() * 60 + date.getMinutes();
@@ -27,13 +30,13 @@ export const DashboardTrainer = () => {
         checkoutVerification(difference);
       }
     };
-    getDifference()
-    const trainerInfo =  async () => {
-      const userId = Number(localStorage.getItem("@UserId"))
-      const info = await getTrainerInfo(userId)
-      setInfoTrainer(info);
-    }
-    trainerInfo()
+    getDifference();
+    const trainerInfo = async () => {
+      const userId = Number(localStorage.getItem("@UserId"));
+      const info = await getTrainerInfo(userId);
+      setUserInfo(info);
+    };
+    trainerInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -50,7 +53,7 @@ export const DashboardTrainer = () => {
             </p>
           </div>
         </header>
-        <CheckinBox infoTrainer={infoTrainer} />
+        <CheckinBox />
         <div className="marginTable">
           <StudentsTable />
         </div>

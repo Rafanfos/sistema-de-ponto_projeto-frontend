@@ -9,7 +9,7 @@ export interface IGetStudentInfoResponse {
 }
 
 export interface ICheckInStudentProps {
-  name: string | null;
+  name: string;
   schedule: string;
   day: number;
   month: number;
@@ -18,6 +18,7 @@ export interface ICheckInStudentProps {
   impediments: boolean | null;
   currentTask: string | null;
 }
+
 export interface ICheckInStudentResponse {
   schedule: string;
   day: number;
