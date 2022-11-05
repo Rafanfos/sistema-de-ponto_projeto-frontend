@@ -4,28 +4,28 @@ import { Link } from "react-router-dom";
 import { AsideStyle } from "./style";
 
 export const AsideBar = () => {
-  return (
-    <AsideStyle>
-      <figure>
-        <img
-          src="https://pbs.twimg.com/media/ETr0ATXWsAAS1Uz.jpg"
-          alt="Imagem do Kirby"
-        />
-      </figure>
+    return (
+        <AsideStyle>
+            <figure>
+                <img
+                    src="https://pbs.twimg.com/media/ETr0ATXWsAAS1Uz.jpg"
+                    alt="Imagem do Kirby"
+                />
+            </figure>
 
-      <nav>
-        <Link to="">
-          <MdSignalCellularAlt />
-        </Link>
+            <nav>
+                <Link to="/dashboard_instrutor">
+                    <MdSignalCellularAlt />
+                </Link>
 
-        <Link to="">
-          <BsBoxSeam />
-        </Link>
+                <Link to="">
+                    <BsBoxSeam />
+                </Link>
 
-        <Link to="">
-          <BsGear />
-        </Link>
-      </nav>
-    </AsideStyle>
-  );
+                <Link to="">
+                    <BsGear />
+                </Link>
+            </nav>
+        </AsideStyle>
+    );
 };

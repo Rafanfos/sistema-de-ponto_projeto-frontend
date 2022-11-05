@@ -73,4 +73,5 @@ export const registerStudentCheckIn = async (
   dataInput: IRegisterCheckInStudentsProps
 ) => {
   await api.patch(`/students/${studentId}`, dataInput);
+
 };

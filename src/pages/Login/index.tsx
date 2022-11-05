@@ -2,14 +2,16 @@ import LoginImage from "../../components/LoginPageImage/image";
 import PageLogin from "./style";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import api from "../../services/api/api";
 import { toast } from "react-toastify";
-
 import { CiMail } from "react-icons/ci";
 import { FiKey } from "react-icons/fi";
 import { BsCheck, BsEye, BsEyeSlash } from "react-icons/bs";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { IGetStudentInfoResponse } from "../../services/api/students/interfaces";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../services/api/commom/requests";
+import { ILoginProps } from "../../services/api/commom/interface";
 
 const schema = yup.object({
     email: yup
@@ -24,25 +26,15 @@ export interface IFormLogin {
     password: string;
 }
 
-interface ILoginForm {
+export interface ILoginForm {
     accessToken: string;
+    user: IGetStudentInfoResponse;
 }
 
 const Login = () => {
     const [viewPassword, setViewPassword] = useState(false);
     const [typeInputPassword, setTypeInputPassword] = useState("password");
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);
-
-    const onSubmit = async (body: IFormLogin) => {
-        try {
-            const { data } = await api.post<ILoginForm>("login", body);
-            localStorage.setItem("@Token", data.accessToken);
-            toast.success("Usuário Logado");
-        } catch (error) {
-            toast.error("Usuário ou senha inválidos");
-            console.error(error);
-        }
-    };
 
     const {
         register,
@@ -51,6 +43,22 @@ const Login = () => {
     } = useForm<IFormLogin>({
         resolver: yupResolver(schema),
     });
+
+
+    const navigate = useNavigate();
+    const onSubmit = async (dataInput: ILoginProps) => {
+        try {
+            const data = await login(dataInput);
+            localStorage.setItem("@token:SistemaDePontos", data.accessToken);
+            localStorage.setItem("@userId:SistemaDePontos", data.user.id + "");
+
+            data.user.is_trainer
+                ? navigate("/dashboard_instrutor", { replace: true })
+                : navigate("/dashboard_aluno", { replace: true });
+        } catch (error) {
+            toast.error("Usuário ou senha inválidos");
+        }
+    };
 
     return (
         <PageLogin>
@@ -114,8 +122,7 @@ const Login = () => {
                         </div>
                         <div className="div_keep_logged">
                             <div
-                                onClick={(event) => {
-                                    event.preventDefault();
+                                onClick={() => {
                                     keepLoggedIn === true
                                         ? setKeepLoggedIn(false)
                                         : setKeepLoggedIn(true);

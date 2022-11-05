@@ -1,4 +1,5 @@
 export interface IGetStudentInfoResponse {
+
   email: string;
   name: string;
   is_trainer: boolean;
@@ -32,4 +33,5 @@ export interface IEditStudentInfoProps {
   email: string;
   name: string;
   avatar: string;
+
 }

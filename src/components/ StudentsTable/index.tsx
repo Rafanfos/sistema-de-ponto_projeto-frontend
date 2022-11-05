@@ -13,6 +13,7 @@ import api from "../../services/api/api";
 import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
 
 export const StudentsTable = () => {
+
   const [studentsList, setStudentsList] = useState<
     IRegisterCheckInStudentsProps[] | []
   >([]);
@@ -160,4 +161,5 @@ export const StudentsTable = () => {
       </StudentsTableStyle>
     </>
   );
+
 };
