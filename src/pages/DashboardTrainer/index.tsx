@@ -44,4 +44,5 @@ export const DashboardTrainer = () => {
       </div>
     </DashboardTrainerStyle>
   );
+
 };

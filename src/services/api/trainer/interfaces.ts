@@ -1,4 +1,5 @@
 import {
+
   ICheckInStudentResponse,
   IEditStudentInfoProps,
 } from "../students/interfaces";
@@ -15,7 +16,8 @@ export interface ICheckInTrainerResponse extends ICheckInStudentResponse {}
 export interface IAddStudentProps {
   email: string;
   name: string;
-  course_module: string;
+  userId: number;
+  studentId: number;
 }
 
 export interface IAddStudentResponse {
@@ -27,13 +29,45 @@ export interface IAddStudentResponse {
 }
 
 export interface IGetStudentsResponse {
+
+    email: string;
+    name: string;
+    course_module: string;
+}
+
+export interface IAddStudentResponse {
+    email: string;
+    name: string;
+    course_module: string;
+    id: number;
+    userId: number;
+}
+
+export interface IGetStudentsResponse {
+
+
   email: string;
   name: string;
-  course_module: string;
   id: number;
+  studentId: number;
   userId: number;
+
 }
 
 export interface IGetTrainerInfoResponse extends IGetStudentsResponse {}
 
 export interface IEditTrainerInfoProps extends IEditStudentInfoProps {}
+
+export interface IRegisterCheckInStudentsProps {
+  name: string;
+  id: number;
+  studentId: number;
+  lastRegister?: string;
+  impediments?: boolean;
+
+}
+
+export interface IGetTrainerInfoResponse extends IGetStudentInfoResponse {}
+
+export interface IEditTrainerInfoProps extends IEditStudentInfoProps {}
+

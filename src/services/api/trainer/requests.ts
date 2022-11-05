@@ -1,4 +1,5 @@
 import api from "../api";
+import { ICheckInStudentResponse } from "../students/interfaces";
 import {
   IAddStudentProps,
   IAddStudentResponse,
@@ -7,6 +8,7 @@ import {
   IEditTrainerInfoProps,
   IGetStudentsResponse,
   IGetTrainerInfoResponse,
+  IRegisterCheckInStudentsProps,
 } from "./interfaces";
 
 export const checkInTrainer = async (
@@ -34,7 +36,18 @@ export const deleteStudent = async (id: number) => {
 export const getStudents = async (
   userId: number
 ): Promise<IGetStudentsResponse[]> => {
-  const { data } = await api.get<IGetStudentsResponse[]>(`students?${userId}`);
+  const { data } = await api.get<IGetStudentsResponse[]>(
+    `students?userId=${userId}`
+  );
+  return data;
+};
+
+export const getCheckInStudents = async (
+  userId: number
+): Promise<ICheckInStudentResponse[]> => {
+  const { data } = await api.get<ICheckInStudentResponse[]>(
+    `checkin?userId=${userId}`
+  );
   return data;
 };
 
@@ -53,4 +66,12 @@ export const editTrainerInfo = async (
 ): Promise<void> => {
   const { data } = await api.patch<void>(`users/${id}`, dataInput);
   return data;
+};
+
+export const registerStudentCheckIn = async (
+  studentId: number,
+  dataInput: IRegisterCheckInStudentsProps
+) => {
+  await api.patch(`/students/${studentId}`, dataInput);
+
 };

@@ -2,7 +2,8 @@ import { createContext, Dispatch, SetStateAction, useState } from "react";
 import { IProvidersProps } from "../../providers";
 
 export interface IUserContextData {
-  checkinShedule: ICheckinData[];
+
+checkinShedule: ICheckinData[];
   setCheckinShedule: Dispatch<SetStateAction<ICheckinData[]>>;
   isTrainer: boolean;
   setIsTrainer: Dispatch<SetStateAction<boolean>>;
@@ -18,19 +19,21 @@ export interface IUserContextData {
   >;
   checkinVerification: (difference: number) => void;
   checkoutVerification: (difference: number) => void;
+
 }
 
 export interface ICheckinData {
-  start: string;
-  end: string;
+    start: string;
+    end: string;
 }
 
 export const UserContext = createContext<IUserContextData>(
-  {} as IUserContextData
+    {} as IUserContextData
 );
 
 const UserProviders = ({ children }: IProvidersProps) => {
-  const [checkinShedule, setCheckinShedule] = useState<ICheckinData[]>([]);
+
+const [checkinShedule, setCheckinShedule] = useState<ICheckinData[]>([]);
   const [isTrainer, setIsTrainer] = useState(false);
   const [isDisable, setIsDisable] = useState({
     checkin: false,
@@ -67,6 +70,7 @@ const UserProviders = ({ children }: IProvidersProps) => {
       {children}
     </UserContext.Provider>
   );
+
 };
 
 export default UserProviders;
