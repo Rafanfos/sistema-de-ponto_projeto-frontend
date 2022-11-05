@@ -42,6 +42,7 @@ const Login = () => {
     try {
       const data = await login(dataInput);
       localStorage.setItem("@Token", data.accessToken);
+      localStorage.setItem("@UserId", String(data.user.userId))
 
       data.user.is_trainer
         ? navigate("/dashboard_instrutor", { replace: true })

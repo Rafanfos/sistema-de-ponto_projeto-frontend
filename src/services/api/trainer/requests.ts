@@ -40,8 +40,8 @@ export const getStudents = async (
 
 export const getTrainerInfo = async (
   userId: number
-): Promise<IGetTrainerInfoResponse> => {
-  const { data } = await api.get<IGetTrainerInfoResponse>(
+): Promise<IGetTrainerInfoResponse[]> => {
+  const { data } = await api.get<IGetTrainerInfoResponse[]>(
     `users?userId=${userId}`
   );
   return data;

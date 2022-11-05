@@ -1,9 +1,29 @@
+import { useContext, useEffect } from "react";
 import { StudentsTable } from "../../components/ StudentsTable";
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
+import { UserContext } from "../../context/UserContext";
 import { DashboardTrainerStyle } from "./style";
 
 export const DashboardTrainer = () => {
+  const { checkinVerification, checkoutVerification } = useContext(UserContext);
+
+  useEffect(() => {
+    const date = new Date();
+    const time = date.getHours() * 60 + date.getMinutes();
+    let difference = 0;
+    const checkinTime = 9 * 60;
+    const checkoutTime = 18 * 60;
+    if (time >= checkinTime && time < checkoutTime) {
+      difference = time - checkinTime;
+      checkinVerification(difference);
+    } else {
+      difference = time - checkoutTime;
+      checkoutVerification(difference);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <DashboardTrainerStyle>
       <AsideBar />
