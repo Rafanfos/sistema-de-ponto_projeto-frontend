@@ -8,7 +8,7 @@ interface IInput {
   id?: string;
   type?: string;
   value?: string;
-  name?: string;
+  register?: UseFormRegisterReturn<string>;
   disabled?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }

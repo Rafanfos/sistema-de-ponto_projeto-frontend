@@ -73,9 +73,8 @@ export const CheckinBox = () => {
       userId: userId,
     };
 
-    console.log(
-      isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId)
-    );
+    console.log(body);
+    isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
   };
 
   return (

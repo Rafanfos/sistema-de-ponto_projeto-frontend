@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from "react";
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
@@ -26,13 +27,13 @@ export const DashboardStudent = () => {
       setUserInfo(info);
     };
     studentInfo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   useEffect(() => {
     const getDifference = () => {
       const date = new Date();
-      const time = 18 * 60;
+      const time = date.getHours() * 60 + date.getMinutes();
       let difference = 0;
 
       if (checkinSchedule.start && checkinSchedule.end) {
@@ -52,7 +53,7 @@ export const DashboardStudent = () => {
       }
     };
     getDifference();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [checkinSchedule]);
 
   return (

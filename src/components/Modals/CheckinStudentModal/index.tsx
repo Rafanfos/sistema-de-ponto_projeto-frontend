@@ -1,19 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContext";
-import { InputDefault } from "../../InputDefault";
 import { CheckinStudentModalStyled } from "./style";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IGetTrainerInfoResponse } from "../../../services/api/trainer/interfaces";
 import { IData } from "../../CheckinBox";
+import { getStudentInfo } from "../../../services/api/students/requests";
+
 
 interface IModalCheckinProps {
   checkin: (info: IGetTrainerInfoResponse[], data: IData) => Promise<void>;
 }
 
 const formSchema = yup.object().shape({
-  // currentTask: yup.string().required("Campo obrigatório*"),
+  currentTask: yup.string().required("Campo obrigatório*"),
 });
 
 const CheckinStudentModal = ({ checkin }: IModalCheckinProps) => {
@@ -31,13 +32,13 @@ const CheckinStudentModal = ({ checkin }: IModalCheckinProps) => {
 
   const onSubmit = async (dataInput: IData) => {
     const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
-    // const studentInfo = await getStudentInfo(userId);
+    const studentInfo = await getStudentInfo(userId);
     dataInput = {
       ...dataInput,
       impediments: impediment === "yes" ? true : false,
     };
-    console.log(dataInput);
-    // checkin(studentInfo, dataInput);
+
+    checkin(studentInfo, dataInput);
   };
 
   useEffect(() => {
@@ -52,8 +53,8 @@ const CheckinStudentModal = ({ checkin }: IModalCheckinProps) => {
           <label htmlFor="currentTask">
             Em qual atividade/entrega você está trabalhando?
           </label>
-          <InputDefault
-            className="input-activity"
+          <input
+            className="input-activity input-default"
             placeholder="Digite a atividade ou entrega..."
             id="currentTask"
             {...register("currentTask")}
