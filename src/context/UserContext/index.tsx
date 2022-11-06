@@ -21,6 +21,8 @@ export interface IUserContextData {
   checkoutVerification: (difference: number) => void;
   userInfo: IGetTrainerInfoResponse[];
   setUserInfo: Dispatch<SetStateAction<IGetTrainerInfoResponse[]>>;
+  showModal: boolean;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface ICheckinData {
@@ -42,18 +44,21 @@ const UserProviders = ({ children }: IProvidersProps) => {
     checkout: true,
   });
   const [userInfo, setUserInfo] = useState<IGetTrainerInfoResponse[]>([]);
+  const toleranceMin = 15;
+  const [showModal, setShowModal] = useState(false);
 
   const checkinVerification = (difference: number) => {
-    if (difference > 30) {
+    console.log(difference, toleranceMin);
+    if (difference > toleranceMin) {
       setIsDisable({ ...isDisable, checkin: true });
     }
   };
 
   const checkoutVerification = (difference: number) => {
-    if (difference < 30) {
-      setIsDisable({ checkin: true, checkout: false });
-    } else {
+    if (difference > toleranceMin) {
       setIsDisable({ checkin: true, checkout: true });
+    } else {
+      setIsDisable({ checkin: true, checkout: false });
     }
   };
 
@@ -70,6 +75,8 @@ const UserProviders = ({ children }: IProvidersProps) => {
         checkoutVerification,
         userInfo,
         setUserInfo,
+        showModal,
+        setShowModal,
       }}
     >
       {children}

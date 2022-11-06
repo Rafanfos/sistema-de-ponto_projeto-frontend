@@ -3,7 +3,7 @@ import { EditFormStyle } from "./style";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { iEditTrainerInfoProps } from "../../services/api/trainer/interfaces";
+import { IEditTrainerInfoProps } from "../../services/api/trainer/interfaces";
 
 const schema = yup.object().shape({
   name: yup.string(),
@@ -20,27 +20,28 @@ export const EditForm = () => {
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm<iEditTrainerInfoProps>({
+  } = useForm<IEditTrainerInfoProps>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
 
   const editButton = () => {
-    const verifyInputPhoto = watch("photo");
+    const verifyInputPhoto = watch("avatar");
 
     if (verifyInputPhoto?.length === 1) {
       return true;
     }
   };
 
-  const editInfoAccount = (data: iEditTrainerInfoProps) => {
-    const { name, email, photo } = data;
+  const editInfoAccount = (data: IEditTrainerInfoProps) => {
+    const { name, email, avatar } = data;
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const treatedObject = {
         name: name !== "" ? name : "vazio",
         email: email !== "" ? email : "vazio",
-        photo: photo,
+        avatar: avatar,
       };
 
     } catch (error) {
@@ -57,7 +58,7 @@ export const EditForm = () => {
             <InputDefault
               placeholder="Digite aqui o seu novo nome ..."
               className="inputStyle"
-              register={register("name")}
+              {...register("name")}
             />
 
             <h3>Email</h3>
@@ -65,23 +66,23 @@ export const EditForm = () => {
             <InputDefault
               placeholder="Digite aqui o seu email anterior."
               className="inputStyle"
-              register={register("oldEmail")}
+              // {...register("oldEmail")}
             />
-            <small>{errors.oldEmail?.message}</small>
+            {/* <small>{errors.oldEmail?.message}</small> */}
 
             <label>Email novo</label>
             <InputDefault
               placeholder="Escreva aqui o seu email."
               className="inputStyle"
-              register={register("email")}
+              {...register("email")}
             />
             <small>{errors.email?.message}</small>
             <InputDefault
               placeholder="Escreva novamente o seu email."
               className="inputStyle"
-              register={register("confirmNewEmail")}
+              // register={register("confirmNewEmail")}
             />
-            <small>{errors.confirmNewEmail?.message}</small>
+            {/* <small>{errors.confirmNewEmail?.message}</small> */}
           </div>
           <div>
             <h3>Foto</h3>
@@ -89,7 +90,7 @@ export const EditForm = () => {
             <InputDefault
               className="inputStyle"
               type="file"
-              register={register("photo")}
+              {...register("avatar")}
               disabled={editButton()}
             />
             <img

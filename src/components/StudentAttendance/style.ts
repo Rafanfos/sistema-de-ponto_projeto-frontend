@@ -27,7 +27,7 @@ export const PercentageDivStyle = styled.div<iPercentageDivStyleProps>`
     width: 90%;
     max-width: 727px;
     margin: 0 auto;
-
+    z-index: -1;
     .total {
       width: 100%;
       background-color: var(--grey-3);
