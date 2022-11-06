@@ -3,16 +3,23 @@ import { UserContext } from "../../context/UserContext";
 import { checkInStudent } from "../../services/api/students/requests";
 import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
 import { checkInTrainer } from "../../services/api/trainer/requests";
+import CheckinStudentModal from "../Modals/CheckinStudentModal";
 import { CheckinBoxStyle } from "./style";
 
-interface IData {
+export interface IData {
   impediments: boolean | null;
   currentTask: string | null;
 }
 
 export const CheckinBox = () => {
-  const { isDisable, isTrainer, checkinSchedule, userInfo } =
-    useContext(UserContext);
+  const {
+    isDisable,
+    isTrainer,
+    checkinSchedule,
+    userInfo,
+    showModal,
+    setShowModal,
+  } = useContext(UserContext);
   const [statusCheckin, setStatusCheckin] = useState("");
 
   const { start, end } = checkinSchedule;
@@ -27,7 +34,7 @@ export const CheckinBox = () => {
     let minutes = String(date.getMinutes());
     let checkinHour = +start.slice(0, 2);
     let checkoutHour = +end.slice(0, 2);
-    let toleranceMin = 15
+    let toleranceMin = 15;
 
     if (hours.length === 1) {
       hours = `0${hours}`;
@@ -42,9 +49,15 @@ export const CheckinBox = () => {
       setStatusCheckin("succeed");
     } else if (Number(hours) >= checkinHour && Number(minutes) > toleranceMin) {
       setStatusCheckin("late");
-    } else if (Number(hours) === checkoutHour && Number(minutes) < toleranceMin) {
+    } else if (
+      Number(hours) === checkoutHour &&
+      Number(minutes) < toleranceMin
+    ) {
       setStatusCheckin("succeed");
-    } else if (Number(hours) >= checkoutHour && Number(minutes) > toleranceMin) {
+    } else if (
+      Number(hours) >= checkoutHour &&
+      Number(minutes) > toleranceMin
+    ) {
       setStatusCheckin("late");
     }
 
@@ -60,6 +73,7 @@ export const CheckinBox = () => {
       userId: userId,
     };
 
+    console.log(body);
     isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
   };
 
@@ -88,7 +102,7 @@ export const CheckinBox = () => {
             onClick={() => {
               isTrainer
                 ? checkin(userInfo, { impediments: null, currentTask: null })
-                : console.log(userInfo);
+                : setShowModal(true);
             }}
           >
             Checkin
@@ -100,13 +114,14 @@ export const CheckinBox = () => {
             onClick={() => {
               isTrainer
                 ? checkin(userInfo, { impediments: null, currentTask: null })
-                : console.log(userInfo);
+                : setShowModal(true);
             }}
           >
             Checkout
           </button>
         </div>
       </div>
+      {showModal && <CheckinStudentModal checkin={checkin} />}
     </CheckinBoxStyle>
   );
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from "react";
 import { StudentsTable } from "../../components/ StudentsTable";
 import { AsideBar } from "../../components/AsideBarNavigation";
@@ -10,35 +11,46 @@ export const DashboardTrainer = () => {
   const {
     checkinVerification,
     checkoutVerification,
+    checkinSchedule,
     setCheckinSchedule,
     setUserInfo,
   } = useContext(UserContext);
 
   useEffect(() => {
-    setCheckinSchedule({ start: "09:00", end: "18:00" });
-    const getDifference = () => {
-      const date = new Date();
-      const time = date.getHours() * 60 + date.getMinutes();
-      let difference = 0;
-      const checkinTime = 9 * 60;
-      const checkoutTime = 18 * 60;
-      if (time >= checkinTime && time < checkoutTime) {
-        difference = time - checkinTime;
-        checkinVerification(difference);
-      } else {
-        difference = time - checkoutTime;
-        checkoutVerification(difference);
-      }
-    };
-    getDifference();
-    const trainerInfo = async () => {
+    setCheckinSchedule({ start: "09:00", end: "21:00" });
+
+    const studentInfo = async () => {
       const userId = Number(localStorage.getItem("@UserId"));
       const info = await getTrainerInfo(userId);
       setUserInfo(info);
     };
-    trainerInfo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    studentInfo();
   }, []);
+
+  useEffect(() => {
+    const getDifference = () => {
+      const date = new Date();
+      const time = date.getHours() * 60 + date.getMinutes();
+      let difference = 0;
+      if (checkinSchedule) {
+        const { start, end } = checkinSchedule;
+        const checkinHour = +start.slice(0, 2);
+        const checkoutHour = +end.slice(0, 2);
+        console.log(time);
+        const checkinTime = checkinHour * 60;
+        const checkoutTime = checkoutHour * 60;
+        if (time >= checkinTime && time < checkoutTime) {
+          difference = time - checkinTime;
+          checkinVerification(difference);
+        } else {
+          console.log(difference);
+          difference = time - checkoutTime;
+          checkoutVerification(difference);
+        }
+      }
+    };
+    getDifference();
+  }, [checkinSchedule]);
 
   return (
     <DashboardTrainerStyle>

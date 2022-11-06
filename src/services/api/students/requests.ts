@@ -8,7 +8,7 @@ import {
 
 export const getStudentInfo = async (userId: number) => {
   const { data } = await api.get<IGetStudentInfoResponse[]>(
-    `users?userId=${userId}`
+    `users?id=${userId}`
   );
   return data;
 };

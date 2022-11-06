@@ -1,4 +1,5 @@
-import { useContext, useEffect} from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect } from "react";
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
 import { HeaderDashboard } from "../../components/HeaderDashboard";
@@ -12,35 +13,48 @@ export const DashboardStudent = () => {
   const {
     checkinVerification,
     checkoutVerification,
+    checkinSchedule,
     setCheckinSchedule,
-    setUserInfo
+    setUserInfo,
   } = useContext(UserContext);
 
   useEffect(() => {
-    setCheckinSchedule({start:"09:00",end:"18:00"})
+    setCheckinSchedule({ start: "09:00", end: "18:00" });
+
+    const studentInfo = async () => {
+      const userId = Number(localStorage.getItem("@UserId"));
+      const info = await getStudentInfo(userId);
+      setUserInfo(info);
+    };
+    studentInfo();
+
+  }, []);
+
+  useEffect(() => {
     const getDifference = () => {
       const date = new Date();
       const time = date.getHours() * 60 + date.getMinutes();
       let difference = 0;
-      const checkinTime = 9 * 60;
-      const checkoutTime = 18 * 60;
-      if (time >= checkinTime && time < checkoutTime) {
-        difference = time - checkinTime;
-        checkinVerification(difference);
-      } else {
-        difference = time - checkoutTime;
-        checkoutVerification(difference);
+
+      if (checkinSchedule.start && checkinSchedule.end) {
+        const { start, end } = checkinSchedule;
+        const checkinHour = +start.slice(0, 2);
+        const checkoutHour = +end.slice(0, 2);
+        const checkinTime = checkinHour * 60;
+        const checkoutTime = checkoutHour * 60;
+        if (time >= checkinTime && time < checkoutTime) {
+          difference = time - checkinTime;
+
+          checkinVerification(difference);
+        } else {
+          difference = time - checkoutTime;
+          checkoutVerification(difference);
+        }
       }
     };
-    getDifference()
-    const studentInfo =  async () => {
-      const userId = Number(localStorage.getItem("@UserId"))
-      const info = await getStudentInfo(userId)
-      setUserInfo(info);
-    }
-    studentInfo()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    getDifference();
+   
+  }, [checkinSchedule]);
 
   return (
     <DashboardStudentStyle>
