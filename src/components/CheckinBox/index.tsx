@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { IUser, useAuthContext } from "../../context/AuthContext";
 import { UserContext } from "../../context/UserContext";
 import { checkInStudent } from "../../services/api/students/requests";
-import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
 import { checkInTrainer } from "../../services/api/trainer/requests";
 import CheckinStudentModal from "../Modals/CheckinStudentModal";
 import { CheckinBoxStyle } from "./style";

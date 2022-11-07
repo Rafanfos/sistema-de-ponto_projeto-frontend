@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from "react";
-import { StudentsTable } from "../../components/ StudentsTable";
+import { StudentsTable } from "../../components/StudentsTable";
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
 import { HeaderDashboard } from "../../components/HeaderDashboard";
 import { UserContext } from "../../context/UserContext";
 import { DashboardTrainerStyle } from "./style";
+import { useAuthContext } from "../../context/AuthContext";
 
 export const DashboardTrainer = () => {
   const {
@@ -15,9 +16,11 @@ export const DashboardTrainer = () => {
     setCheckinSchedule,
   } = useContext(UserContext);
 
+  const {isTrainer} = useAuthContext()
+
   useEffect(() => {
     setCheckinSchedule({ start: "09:00", end: "21:00" });
-
+    isTrainer()
   }, []);
 
   useEffect(() => {
