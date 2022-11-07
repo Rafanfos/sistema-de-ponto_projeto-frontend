@@ -3,6 +3,7 @@ import { AccountSettingsStyle } from "./style";
 import { EditForm } from "../../components/EditForm";
 
 export const AccountSettings = () => {
+
   return (
     <>
       <AsideBar />

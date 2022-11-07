@@ -29,7 +29,7 @@ export const DashboardStudent = () => {
       const info = await getStudentInfo(userId);
       setUserInfo(info);
     };
-    studentInfo();
+   studentInfo();
   }, []);
 
   useEffect(() => {
