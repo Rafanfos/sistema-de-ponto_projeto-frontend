@@ -40,24 +40,21 @@ const UserProviders = ({ children }: IProvidersProps) => {
   );
   const [isTrainer, setIsTrainer] = useState(false);
   const [isDisable, setIsDisable] = useState({
-    checkin: false,
+    checkin: true,
     checkout: true,
   });
   const [userInfo, setUserInfo] = useState<IGetTrainerInfoResponse[]>([]);
-  const toleranceMin = 15;
+  const toleranceMin = 20;
   const [showModal, setShowModal] = useState(false);
 
   const checkinVerification = (difference: number) => {
-    console.log(difference, toleranceMin);
-    if (difference > toleranceMin) {
-      setIsDisable({ ...isDisable, checkin: true });
+    if (difference < toleranceMin) {
+      setIsDisable({ ...isDisable, checkin: false });
     }
   };
 
   const checkoutVerification = (difference: number) => {
-    if (difference > toleranceMin) {
-      setIsDisable({ checkin: true, checkout: true });
-    } else {
+    if (difference < toleranceMin) {
       setIsDisable({ checkin: true, checkout: false });
     }
   };

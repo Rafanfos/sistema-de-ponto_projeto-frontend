@@ -25,7 +25,7 @@ export const CheckinBox = () => {
   const { start, end } = checkinSchedule;
 
   const checkin = async (info: IGetTrainerInfoResponse[], data: IData) => {
-    const userId = Number(localStorage.getItem("@UserId"));
+    const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
     const date = new Date();
     const day = Number(date.getDate() - 1);
     const month = Number(date.getMonth() + 1);
@@ -34,7 +34,7 @@ export const CheckinBox = () => {
     let minutes = String(date.getMinutes());
     let checkinHour = +start.slice(0, 2);
     let checkoutHour = +end.slice(0, 2);
-    let toleranceMin = 15;
+    let toleranceMin = 20;
 
     if (hours.length === 1) {
       hours = `0${hours}`;
@@ -72,8 +72,7 @@ export const CheckinBox = () => {
       status: statusCheckin,
       userId: userId,
     };
-
-    console.log(body);
+    console.log(userId);
     isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
   };
 
