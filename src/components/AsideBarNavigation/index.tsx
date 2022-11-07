@@ -1,15 +1,20 @@
+import { useContext } from "react";
 import { BsBoxSeam, BsGear } from "react-icons/bs";
 import { MdSignalCellularAlt } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 import { AsideStyle } from "./style";
 
 export const AsideBar = () => {
+
+const { userAvatar } = useContext(UserContext)
+
     return (
         <AsideStyle>
             <figure>
                 <img
-                    src="https://pbs.twimg.com/media/ETr0ATXWsAAS1Uz.jpg"
-                    alt="Imagem do Kirby"
+                    src={userAvatar}
+                    alt="Avatar do Usuário"
                 />
             </figure>
 

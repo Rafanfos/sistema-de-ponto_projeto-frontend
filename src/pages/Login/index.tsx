@@ -6,12 +6,13 @@ import { toast } from "react-toastify";
 import { CiMail } from "react-icons/ci";
 import { FiKey } from "react-icons/fi";
 import { BsCheck, BsEye, BsEyeSlash } from "react-icons/bs";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { IGetStudentInfoResponse } from "../../services/api/students/interfaces";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/api/commom/requests";
 import { ILoginProps } from "../../services/api/commom/interface";
+import { UserContext } from "../../context/UserContext";
 
 const schema = yup.object({
     email: yup
@@ -32,6 +33,9 @@ export interface ILoginForm {
 }
 
 const Login = () => {
+
+    const { getUserInfo } = useContext(UserContext)
+
     const [viewPassword, setViewPassword] = useState(false);
     const [typeInputPassword, setTypeInputPassword] = useState("password");
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);
@@ -56,6 +60,8 @@ const Login = () => {
                 : navigate("/dashboard_aluno", { replace: true });
         } catch (error) {
             toast.error("Usuário ou senha inválidos");
+        } finally {
+            getUserInfo();
         }
     };
 
