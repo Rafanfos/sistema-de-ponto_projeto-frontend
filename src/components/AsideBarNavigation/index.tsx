@@ -22,7 +22,7 @@ export const AsideBar = () => {
                     <BsBoxSeam />
                 </Link>
 
-                <Link to="">
+                <Link to="/configuracoes_conta">
                     <BsGear />
                 </Link>
             </nav>

@@ -6,6 +6,7 @@ import { HeaderDashboard } from "../../components/HeaderDashboard";
 import { StudentAttendance } from "../../components/StudentAttendance";
 import { UserTable } from "../../components/UserTable";
 import { UserContext } from "../../context/UserContext";
+import api from "../../services/api/api";
 import { getStudentInfo } from "../../services/api/students/requests";
 import { DashboardStudentStyle } from "./style";
 
@@ -22,12 +23,13 @@ export const DashboardStudent = () => {
     setCheckinSchedule({ start: "09:00", end: "18:00" });
 
     const studentInfo = async () => {
-      const userId = Number(localStorage.getItem("@UserId"));
+      const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
+      const token = localStorage.getItem("@token:SistemaDePontos");
+      api.defaults.headers.authorization = `Bearer ${token}`;
       const info = await getStudentInfo(userId);
       setUserInfo(info);
     };
     studentInfo();
-
   }, []);
 
   useEffect(() => {
@@ -53,7 +55,6 @@ export const DashboardStudent = () => {
       }
     };
     getDifference();
-   
   }, [checkinSchedule]);
 
   return (

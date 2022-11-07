@@ -66,9 +66,9 @@ export const EditForm = () => {
             <InputDefault
               placeholder="Digite aqui o seu email anterior."
               className="inputStyle"
-              // {...register("oldEmail")}
+              {...register("oldEmail")}
             />
-            {/* <small>{errors.oldEmail?.message}</small> */}
+            <small>{errors.oldEmail?.message}</small>
 
             <label>Email novo</label>
             <InputDefault
@@ -80,9 +80,9 @@ export const EditForm = () => {
             <InputDefault
               placeholder="Escreva novamente o seu email."
               className="inputStyle"
-              // register={register("confirmNewEmail")}
+              register={register("confirmNewEmail")}
             />
-            {/* <small>{errors.confirmNewEmail?.message}</small> */}
+            <small>{errors.confirmNewEmail?.message}</small>
           </div>
           <div>
             <h3>Foto</h3>

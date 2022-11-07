@@ -35,4 +35,6 @@ export interface IEditStudentInfoProps {
   email: string;
   name: string;
   avatar: string;
+  oldEmail?: string;
+  confirmNewEmail?: string;
 }
