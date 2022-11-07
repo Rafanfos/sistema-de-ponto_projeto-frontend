@@ -3,7 +3,9 @@ import { useContext, useEffect } from "react";
 import { StudentsTable } from "../../components/ StudentsTable";
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
+import { HeaderDashboard } from "../../components/HeaderDashboard";
 import { UserContext } from "../../context/UserContext";
+import api from "../../services/api/api";
 import { getTrainerInfo } from "../../services/api/trainer/requests";
 import { DashboardTrainerStyle } from "./style";
 
@@ -19,12 +21,14 @@ export const DashboardTrainer = () => {
   useEffect(() => {
     setCheckinSchedule({ start: "09:00", end: "21:00" });
 
-    const studentInfo = async () => {
-      const userId = Number(localStorage.getItem("@UserId"));
+    const trainerInfo = async () => {
+      const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
+      const token = localStorage.getItem("@token:SistemaDePontos");
+      api.defaults.headers.authorization = `Bearer ${token}`;
       const info = await getTrainerInfo(userId);
       setUserInfo(info);
     };
-    studentInfo();
+    trainerInfo();
   }, []);
 
   useEffect(() => {
@@ -32,11 +36,10 @@ export const DashboardTrainer = () => {
       const date = new Date();
       const time = date.getHours() * 60 + date.getMinutes();
       let difference = 0;
-      if (checkinSchedule) {
+      if (checkinSchedule.start && checkinSchedule.end) {
         const { start, end } = checkinSchedule;
         const checkinHour = +start.slice(0, 2);
         const checkoutHour = +end.slice(0, 2);
-        console.log(time);
         const checkinTime = checkinHour * 60;
         const checkoutTime = checkoutHour * 60;
         if (time >= checkinTime && time < checkoutTime) {
@@ -56,15 +59,7 @@ export const DashboardTrainer = () => {
     <DashboardTrainerStyle>
       <AsideBar />
       <div className="containerMain">
-        <header>
-          <h1>Turma 13 - M3</h1>
-          <div>
-            <h2>Bem vindo Tsunode</h2>
-            <p>
-              <span>-</span> 31/10/2022
-            </p>
-          </div>
-        </header>
+        <HeaderDashboard />
         <CheckinBox />
         <div className="marginTable">
           <StudentsTable />
