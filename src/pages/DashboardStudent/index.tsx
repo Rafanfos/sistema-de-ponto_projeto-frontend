@@ -46,7 +46,6 @@ export const DashboardStudent = () => {
         const checkoutTime = checkoutHour * 60;
         if (time >= checkinTime && time < checkoutTime) {
           difference = time - checkinTime;
-
           checkinVerification(difference);
         } else {
           difference = time - checkoutTime;
