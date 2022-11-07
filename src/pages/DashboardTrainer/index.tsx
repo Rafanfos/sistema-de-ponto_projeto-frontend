@@ -5,8 +5,6 @@ import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
 import { HeaderDashboard } from "../../components/HeaderDashboard";
 import { UserContext } from "../../context/UserContext";
-import api from "../../services/api/api";
-import { getTrainerInfo } from "../../services/api/trainer/requests";
 import { DashboardTrainerStyle } from "./style";
 
 export const DashboardTrainer = () => {
@@ -15,20 +13,11 @@ export const DashboardTrainer = () => {
     checkoutVerification,
     checkinSchedule,
     setCheckinSchedule,
-    setUserInfo,
   } = useContext(UserContext);
 
   useEffect(() => {
     setCheckinSchedule({ start: "09:00", end: "21:00" });
 
-    const trainerInfo = async () => {
-      const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
-      const token = localStorage.getItem("@token:SistemaDePontos");
-      api.defaults.headers.authorization = `Bearer ${token}`;
-      const info = await getTrainerInfo(userId);
-      setUserInfo(info);
-    };
-    trainerInfo();
   }, []);
 
   useEffect(() => {

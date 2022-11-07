@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { IUser, useAuthContext } from "../../context/AuthContext";
 import { UserContext } from "../../context/UserContext";
 import { checkInStudent } from "../../services/api/students/requests";
 import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
@@ -16,16 +17,18 @@ export const CheckinBox = () => {
     isDisable,
     isTrainer,
     checkinSchedule,
-    userInfo,
     showModal,
     setShowModal,
   } = useContext(UserContext);
+
+  const {user} = useAuthContext()
+  
   const [statusCheckin, setStatusCheckin] = useState("");
 
   const { start, end } = checkinSchedule;
 
-  const checkin = async (info: IGetTrainerInfoResponse[], data: IData) => {
-    const userId = Number(localStorage.getItem("@UserId"));
+  const checkin = async (info: IUser, data: IData) => {
+    const {userId, is_trainer, name} = user;
     const date = new Date();
     const day = Number(date.getDate() - 1);
     const month = Number(date.getMonth() + 1);
@@ -62,7 +65,7 @@ export const CheckinBox = () => {
     }
 
     const body = {
-      name: info[0].name,
+      name: name,
       schedule: completHour,
       day: day,
       month: month,
@@ -74,7 +77,7 @@ export const CheckinBox = () => {
     };
 
     console.log(body);
-    isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
+    is_trainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
   };
 
   return (
@@ -101,7 +104,7 @@ export const CheckinBox = () => {
             disabled={isDisable.checkin}
             onClick={() => {
               isTrainer
-                ? checkin(userInfo, { impediments: null, currentTask: null })
+                ? checkin(user, { impediments: null, currentTask: null })
                 : setShowModal(true);
             }}
           >
@@ -113,7 +116,7 @@ export const CheckinBox = () => {
             disabled={isDisable.checkout}
             onClick={() => {
               isTrainer
-                ? checkin(userInfo, { impediments: null, currentTask: null })
+                ? checkin(user, { impediments: null, currentTask: null })
                 : setShowModal(true);
             }}
           >
