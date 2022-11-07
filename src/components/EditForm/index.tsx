@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IEditTrainerInfoProps } from "../../services/api/trainer/interfaces";
 import { toast } from "react-toastify";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 
 const schema = yup.object().shape(
@@ -42,9 +42,6 @@ const schema = yup.object().shape(
 export const EditForm = () => {
   const { userInfo, editUserInfo, userAvatar, setUserAvatar } =
     useContext(UserContext);
-  const [validateInput, setValidateInput] = useState<boolean | undefined>(
-    undefined
-  );
 
   const {
     register,
@@ -55,6 +52,13 @@ export const EditForm = () => {
   } = useForm<IEditTrainerInfoProps>({
     resolver: yupResolver(schema),
     mode: "onChange",
+    defaultValues: {
+      name: "",
+      oldEmail: "",
+      email: "",
+      confirmNewEmail: "",
+      avatar: [],
+    },
   });
 
   const convertToBase64 = () => {
@@ -65,7 +69,6 @@ export const EditForm = () => {
       readFile.onload = () => {
         setUserAvatar(readFile.result?.toString());
       };
-
       return true;
     }
   };
@@ -80,18 +83,10 @@ export const EditForm = () => {
         watch("confirmNewEmail") !== "")
     ) {
       return true;
+    } else {
+      return false;
     }
   };
-
-  useEffect(() => {
-    setValidateInput(verifyInputs());
-  }, [
-    watch("name"),
-    watch("avatar"),
-    watch("oldEmail"),
-    watch("email"),
-    watch("confirmNewEmail"),
-  ]);
 
   const editInfoAccount = (data: IEditTrainerInfoProps) => {
     const { name, email, oldEmail } = data;
@@ -160,7 +155,7 @@ export const EditForm = () => {
           </div>
         </div>
 
-        <button type="submit" disabled={!validateInput}>
+        <button type="submit" disabled={!verifyInputs()}>
           Confirmar alteração
         </button>
       </form>
