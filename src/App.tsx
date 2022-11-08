@@ -1,11 +1,14 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css"
+import { AuthProvider } from "./context/AuthContext";
 import RoutesMain from "./routes";
 
 const App = () => {
   return (
     <div className="App">
-      <RoutesMain />
+      <AuthProvider>
+        <RoutesMain />
+      </AuthProvider>
       <ToastContainer
         position="top-right"
         autoClose={1000}
