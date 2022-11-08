@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { VscCircleLargeOutline } from "react-icons/vsc";
@@ -6,8 +7,8 @@ import { getStudents } from "../../services/api/trainer/requests";
 import { ContainerStudentsStyle, StudentsTableStyle } from "./style";
 import { DeleteStudentModal } from "../DeleteStudentModal";
 import { AddStudentModal } from "../AddStudentModal";
-import api from "../../services/api/api";
 import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
+import { useAuthContext } from "../../context/AuthContext";
 
 export const StudentsTable = () => {
   const [studentsList, setStudentsList] = useState<
@@ -23,11 +24,11 @@ export const StudentsTable = () => {
     setStudentDelete(student);
   }
 
+  const {user} = useAuthContext()
+
   useEffect(() => {
     const listStudents = async () => {
-      const token = localStorage.getItem("@token:SistemaDePontos");
-      api.defaults.headers.authorization = `Bearer ${token}`;
-      const students = await getStudents(2);
+      const students = await getStudents(user.userId);
       setStudentsList(students);
     };
     listStudents();

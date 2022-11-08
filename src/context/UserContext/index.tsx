@@ -8,6 +8,7 @@ import {
 import { toast } from "react-toastify";
 import { IProvidersProps } from "../../providers";
 import api from "../../services/api/api";
+import { ICheckInStudentResponse } from "../../services/api/students/interfaces";
 import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
 import {
   getCheckInStudents,
@@ -39,6 +40,10 @@ export interface IUserContextData {
   userAvatar: string | undefined;
   setUserAvatar: Dispatch<SetStateAction<string | undefined>>;
   getUserInfo: () => Promise<void>;
+  myCheckins: ICheckInStudentResponse[];
+  setMyCheckins: Dispatch<SetStateAction<ICheckInStudentResponse[]>>;
+  studentsCheckin: ICheckInStudentResponse[];
+  setStudentsCheckin: Dispatch<SetStateAction<ICheckInStudentResponse[]>>;
 }
 
 export interface ICheckinData {
@@ -71,6 +76,10 @@ const UserProviders = ({ children }: IProvidersProps) => {
   const toleranceMin = 20;
   const [showModal, setShowModal] = useState(false);
   const [userAvatar, setUserAvatar] = useState<string | undefined>(undefined);
+  const [myCheckins, setMyCheckins] = useState<ICheckInStudentResponse[]>([]);
+  const [studentsCheckin, setStudentsCheckin] = useState<
+    ICheckInStudentResponse[]
+  >([]);
 
   const checkinVerification = (difference: number) => {
     if (difference < toleranceMin) {
@@ -138,6 +147,10 @@ const UserProviders = ({ children }: IProvidersProps) => {
         userAvatar,
         setUserAvatar,
         getUserInfo,
+        myCheckins,
+        setMyCheckins,
+        studentsCheckin,
+        setStudentsCheckin,
       }}
     >
       {children}

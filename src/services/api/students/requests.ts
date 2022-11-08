@@ -15,8 +15,8 @@ export const getStudentInfo = async (userId: number) => {
 
 export const getCheckInStudent = async (
   userId: number
-): Promise<ICheckInStudentResponse> => {
-  const { data } = await api.get<ICheckInStudentResponse>(
+): Promise<ICheckInStudentResponse[]> => {
+  const { data } = await api.get<ICheckInStudentResponse[]>(
     `checkin?userId=${userId}`
   );
   return data;

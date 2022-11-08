@@ -45,7 +45,6 @@ export const DashboardTrainerStyle = styled.div`
 
     .marginTable {
       width: 100%;
-      padding-left: 2rem;
     }
   }
 
@@ -53,43 +52,36 @@ export const DashboardTrainerStyle = styled.div`
     flex-direction: row;
 
     .containerMain {
-      width: 85;
-      margin-left: 84px;
+      padding: unset;
+      padding-left: 84px;
 
-      .containerMain {
-        margin-left: 84px;
+      header {
+        margin-top: 2.188rem;
 
-        header {
-          margin-top: 2.188rem;
+        h1 {
+          font-weight: 500;
+          font-size: 32px;
+        }
 
-          h1 {
+        div {
+          flex-direction: column;
+
+          h2 {
             font-weight: 500;
             font-size: 32px;
           }
 
-          div {
-            flex-direction: column;
+          p {
+            font-size: 24px;
+            font-weight: 400;
 
-            h2 {
-              font-weight: 500;
-              font-size: 32px;
-            }
-
-            p {
-              font-size: 24px;
-              font-weight: 400;
-
-              span {
-                display: none;
-              }
+            span {
+              display: none;
             }
           }
         }
-
-        .marginTable {
-          padding: unset;
-        }
       }
+
     }
     .loader {
       border: 9px solid var(--grey-4);

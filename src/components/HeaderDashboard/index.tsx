@@ -2,19 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { HeaderDashboardStyle } from "./style";
 
-// interface iUserInfo {
-//   class: string;
-//   course_module: string;
-//   email: string;
-//   id: number;
-//   isTrainer: boolean;
-//   name: string;
-//   password: string;
-//   userId: number;
-// }
-
 export const HeaderDashboard = () => {
-  // const [userInfo, setUserInfo] = useState<iUserInfo[] | null>(null);
   const { userInfo } = useContext(UserContext);
   const [currentDate, setCurrentDate] = useState("");
 

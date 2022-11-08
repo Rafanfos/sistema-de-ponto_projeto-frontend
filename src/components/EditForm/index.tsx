@@ -103,7 +103,6 @@ export const EditForm = () => {
       editUserInfo(treatedObject);
       setUserAvatar(userAvatar);
     }
-
     reset();
   };
 

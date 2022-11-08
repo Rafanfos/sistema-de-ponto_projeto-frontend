@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
+import { IUser, useAuthContext } from "../../context/AuthContext";
 import { UserContext } from "../../context/UserContext";
 import api from "../../services/api/api";
 import { registerPoint } from "../../services/api/commom/requests";
 import { checkInStudent } from "../../services/api/students/requests";
-import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
 import {
   checkInTrainer,
   getCheckInStudents,
@@ -22,16 +22,19 @@ export const CheckinBox = () => {
     setIsDisable,
     isTrainer,
     checkinSchedule,
-    userInfo,
     showModal,
     setShowModal,
   } = useContext(UserContext);
+
+  const {user} = useAuthContext()
+  
   const [statusCheckin, setStatusCheckin] = useState("");
 
   const { start, end } = checkinSchedule;
 
-  const checkin = async (info: IGetTrainerInfoResponse[], data: IData) => {
-    const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
+  const checkin = async (info: IUser, data: IData) => {
+    const {userId,name} = user;
+
     const date = new Date();
     const day = Number(date.getDate());
     const month = Number(date.getMonth() + 1);
@@ -69,7 +72,7 @@ export const CheckinBox = () => {
     }
 
     const body = {
-      name: info[0].name,
+      name: name,
       schedule: completHour,
       day: day,
       month: month,
@@ -79,12 +82,13 @@ export const CheckinBox = () => {
       status: statusCheckin,
       userId: userId,
     };
+
     try {
       isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
       setIsDisable({ checkin: true, checkout: true });
     } catch {}
     +hours >= checkoutHour &&
-      pointRegister(userId, day, month, currentAge, info[0].name);
+      pointRegister(userId, day, month, currentAge, info.name);
   };
   const pointRegister = async (
     userId: number,
@@ -117,6 +121,7 @@ export const CheckinBox = () => {
       };
       await registerPoint(data);
     }
+
   };
   return (
     <CheckinBoxStyle>
@@ -142,7 +147,7 @@ export const CheckinBox = () => {
             disabled={isDisable.checkin}
             onClick={() => {
               isTrainer
-                ? checkin(userInfo, { impediments: null, currentTask: null })
+                ? checkin(user, { impediments: null, currentTask: null })
                 : setShowModal(true);
             }}
           >
@@ -154,7 +159,7 @@ export const CheckinBox = () => {
             disabled={isDisable.checkout}
             onClick={() => {
               isTrainer
-                ? checkin(userInfo, { impediments: null, currentTask: null })
+                ? checkin(user, { impediments: null, currentTask: null })
                 : setShowModal(true);
             }}
           >

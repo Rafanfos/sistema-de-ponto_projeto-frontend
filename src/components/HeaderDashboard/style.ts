@@ -2,8 +2,7 @@ import styled from "styled-components";
 
 export const HeaderDashboardStyle = styled.header`
   text-align: center;
-  margin-top: 0.688rem;
-
+  
   h1 {
     font-weight: 500;
     font-size: 20px;
@@ -20,7 +19,6 @@ export const HeaderDashboardStyle = styled.header`
     font-weight: 400;
   }
   @media (min-width: 768px) {
-    margin-top: 2.188rem;
 
     h1 {
       font-weight: 500;
@@ -28,11 +26,11 @@ export const HeaderDashboardStyle = styled.header`
     }
     h2 {
       font-weight: 500;
-      font-size: 32px;
+      font-size: 30px;
     }
 
     p {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 400;
     }
   }

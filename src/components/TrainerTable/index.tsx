@@ -1,37 +1,29 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { UserContext } from "../../context/UserContext";
 import api from "../../services/api/api";
-import { UserTableStyle } from "./style";
+import { IDates, IDatesStatus } from "../UserTable";
+import { UserTableStyle } from "../UserTable/style";
 
-interface IUserTableProps {
+interface ITrainerTableProps {
   userIdProps: number;
 }
-export interface IDates {
-  day: number;
-  month: number;
-}
-
-export interface IDatesStatus {
-  status: string;
-}
-export const UserTable = ({ userIdProps }: IUserTableProps) => {
-  const { myCheckins, setMyCheckins } = useContext(UserContext);
+export const TrainerTable = ({ userIdProps }: ITrainerTableProps) => {
+  const { studentsCheckin, setStudentsCheckin } = useContext(UserContext);
   const [sortedCheckinsDate, setSortedCheckinsDate] = useState(true);
   const [sortedCheckinsStatus, setSortedCheckinsStatus] = useState(true);
 
-    useEffect(() => {
+  useEffect(() => {
     async function checkinUser() {
       try {
         const { data } = await api.get(`/checkin?userId=${userIdProps}`);
-        setMyCheckins(data);
+        setStudentsCheckin(data);
       } catch (err) {
         console.log(err);
       }
     }
     checkinUser();
-  }, []);
+  }, [userIdProps]);
 
   const sortCallbackDates = (a: IDates, b: IDates) => {
     if (sortedCheckinsDate) {
@@ -45,8 +37,8 @@ export const UserTable = ({ userIdProps }: IUserTableProps) => {
       }
       return 0;
     } else {
-      setSortedCheckinsDate(true);
       setSortedCheckinsStatus(false);
+      setSortedCheckinsDate(true);
 
       if (a.day < b.day && a.month <= b.month) {
         return -1;
@@ -59,9 +51,10 @@ export const UserTable = ({ userIdProps }: IUserTableProps) => {
   };
 
   const sortingDates = () => {
-    const sorting = myCheckins.sort(sortCallbackDates);
-    setMyCheckins(sorting);
+    const sorting = studentsCheckin.sort(sortCallbackDates);
+    setStudentsCheckin(sorting);
   };
+
   function sortCallbackStatus(a: IDatesStatus, b: IDatesStatus) {
     if (sortedCheckinsStatus) {
       setSortedCheckinsStatus(false);
@@ -87,10 +80,9 @@ export const UserTable = ({ userIdProps }: IUserTableProps) => {
     }
   }
   const sortingStatus = () => {
-    const sorting = myCheckins.sort(sortCallbackStatus);
-    setMyCheckins(sorting);
+    const sorting = studentsCheckin.sort(sortCallbackStatus);
+    setStudentsCheckin(sorting);
   };
-
   return (
     <UserTableStyle>
       <table>
@@ -125,8 +117,8 @@ export const UserTable = ({ userIdProps }: IUserTableProps) => {
         </thead>
 
         <tbody>
-          {myCheckins &&
-            myCheckins.map((checkin) => {
+          {studentsCheckin &&
+            studentsCheckin.map((checkin) => {
               const { id, day, month, year, schedule, status } = checkin;
               return (
                 <tr key={id}>

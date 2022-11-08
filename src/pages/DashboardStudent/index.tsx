@@ -6,8 +6,6 @@ import { HeaderDashboard } from "../../components/HeaderDashboard";
 import { StudentAttendance } from "../../components/StudentAttendance";
 import { UserTable } from "../../components/UserTable";
 import { UserContext } from "../../context/UserContext";
-import api from "../../services/api/api";
-import { getStudentInfo } from "../../services/api/students/requests";
 import { DashboardStudentStyle } from "./style";
 
 export const DashboardStudent = () => {
@@ -16,26 +14,19 @@ export const DashboardStudent = () => {
     checkoutVerification,
     checkinSchedule,
     setCheckinSchedule,
-    setUserInfo,
     setIsTrainer,
   } = useContext(UserContext);
+  const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
 
   useEffect(() => {
-    setCheckinSchedule({ start: "09:00", end: "18:00" });
-
-    const studentInfo = async () => {
-      const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
-      const token = localStorage.getItem("@token:SistemaDePontos");
-      api.defaults.headers.authorization = `Bearer ${token}`;
-      const info = await getStudentInfo(userId);
-      setUserInfo(info);
-    };
-    studentInfo();
+    setCheckinSchedule({ start: "09:00", end: "14:00" });
   }, []);
 
   useEffect(() => {
     setIsTrainer(false);
     const getDifference = () => {
+      setIsTrainer(false);
+
       const date = new Date();
       const day = date.getDay();
       const month = date.getMonth();
@@ -68,7 +59,7 @@ export const DashboardStudent = () => {
         <HeaderDashboard />
         <CheckinBox />
         <StudentAttendance />
-        <UserTable />
+        <UserTable userIdProps={userId} />
       </div>
     </DashboardStudentStyle>
   );
