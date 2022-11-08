@@ -23,7 +23,7 @@ export const AccountSettingsStyle = styled.div`
   }
 
   @media (min-width: 768px) {
-    margin-left: 84px;
+    padding-left: 84px;
 
     .containerMain {
       width: 75%;
