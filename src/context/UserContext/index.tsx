@@ -8,7 +8,10 @@ import {
 import { toast } from "react-toastify";
 import { IProvidersProps } from "../../providers";
 import api from "../../services/api/api";
-import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
+import {
+  IAddStudentResponse,
+  IGetTrainerInfoResponse,
+} from "../../services/api/trainer/interfaces";
 import { getTrainerInfo } from "../../services/api/trainer/requests";
 
 export interface IUserContextData {
@@ -36,6 +39,8 @@ export interface IUserContextData {
   userAvatar: string | undefined;
   setUserAvatar: Dispatch<SetStateAction<string | undefined>>;
   getUserInfo: () => Promise<void>;
+  temporaryStudents: IAddStudentResponse;
+  setTemporaryStudents: Dispatch<SetStateAction<IAddStudentResponse>>;
 }
 
 export interface ICheckinData {
@@ -68,6 +73,8 @@ const UserProviders = ({ children }: IProvidersProps) => {
   const toleranceMin = 20;
   const [showModal, setShowModal] = useState(false);
   const [userAvatar, setUserAvatar] = useState<string | undefined>(undefined);
+  const [temporaryStudents, setTemporaryStudents] =
+    useState<IAddStudentResponse>({} as IAddStudentResponse);
 
   const checkinVerification = (difference: number) => {
     if (difference < toleranceMin) {
@@ -124,6 +131,8 @@ const UserProviders = ({ children }: IProvidersProps) => {
         userAvatar,
         setUserAvatar,
         getUserInfo,
+        temporaryStudents,
+        setTemporaryStudents,
       }}
     >
       {children}

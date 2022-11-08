@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { VscCircleLargeOutline } from "react-icons/vsc";
 import { FiTrash2 } from "react-icons/fi";
@@ -11,9 +11,10 @@ import { DeleteStudentModal } from "../DeleteStudentModal";
 import { AddStudentModal } from "../AddStudentModal";
 import api from "../../services/api/api";
 import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
+import { UserContext } from "../../context/UserContext";
 
 export const StudentsTable = () => {
-
+  const { temporaryStudents } = useContext(UserContext);
   const [studentsList, setStudentsList] = useState<
     IRegisterCheckInStudentsProps[] | []
   >([]);
@@ -29,7 +30,8 @@ export const StudentsTable = () => {
 
   useEffect(() => {
     async function listStudents() {
-      // const userId = localStorage.getItem("@UserId")
+      const token = localStorage.getItem("@token:SistemaDePontos");
+      api.defaults.headers.authorization = `Bearer ${token}`;
       const list = await getStudents(2);
 
       list.map(async (student) => {
@@ -40,24 +42,27 @@ export const StudentsTable = () => {
           const lastRegisterDate = `${schedule} | ${day}/${month}/${year}`;
 
           const lastRegisterImp = lastRegister.impediments;
-          await api.patch(`/students/${student.studentId}`, {
+
+          const response = await api.patch(`/students/${student.id}`, {
             lastRegister: lastRegisterDate,
             impediments: lastRegisterImp,
           });
+          // setStudentsList([
+          //   ...studentsList.filter((s) => s.id !== student.id),
+          //   response.data,
+          // ]);
         }
       });
     }
+    getStudentList();
     listStudents();
-  }, []);
+  }, [temporaryStudents]);
 
-  useEffect(() => {
-    const listStundents = async () => {
-      // const userId = localStorage.getItem("@UserId")
-      const students = await getStudents(2);
-      setStudentsList(students);
-    };
-    listStundents();
-  }, [studentsList]);
+  const getStudentList = async () => {
+    // const userId = localStorage.getItem("@UserId")
+    const students = await getStudents(2);
+    setStudentsList(students);
+  };
 
   return (
     <>
@@ -161,5 +166,4 @@ export const StudentsTable = () => {
       </StudentsTableStyle>
     </>
   );
-
 };

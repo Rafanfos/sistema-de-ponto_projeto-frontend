@@ -20,10 +20,8 @@ export const DeleteStudentModal = ({
   async function handleDeleteStudent(): Promise<void> {
     try {
       if (studentDelete) {
-        deleteStudent(studentDelete.id);
-        toast.success("Aluno deletado com sucesso", {
-          theme: "dark",
-        });
+        await deleteStudent(studentDelete.id);
+        toast.success("Aluno deletado com sucesso");
 
         const filteredStudents = studentsList.filter(
           (student) => student.id !== studentDelete.id
@@ -32,10 +30,7 @@ export const DeleteStudentModal = ({
         setIsDeleteModal(false);
       }
     } catch (err) {
-      toast.error("Não foi possível deletar o aluno", {
-        theme: "dark",
-      });
-      console.log(err);
+      toast.error("Não foi possível deletar o aluno");
     }
   }
   return (

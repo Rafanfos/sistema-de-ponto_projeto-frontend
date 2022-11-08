@@ -5,6 +5,8 @@ import { AddStudentModalStyle } from "./style";
 import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
 import { addStudent } from "../../services/api/trainer/requests";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 interface IAddStudentModal {
   setIsAddModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,6 +19,8 @@ interface IAddStudent {
   name: string;
   userId: number;
   studentId: number;
+  lastRegister: string;
+  impediments: boolean;
 }
 const schemaAddStudent = yup.object({
   name: yup.string().required("Nome obrigatório"),
@@ -28,6 +32,7 @@ export const AddStudentModal = ({
   setIsAddModal,
   setStudentsList,
 }: IAddStudentModal) => {
+  const { setTemporaryStudents } = useContext(UserContext);
   const {
     register,
     handleSubmit,
@@ -38,19 +43,19 @@ export const AddStudentModal = ({
 
   async function handleSubmitFunction(data: IAddStudent) {
     // const id = localStorage.getItem("@userId")
-    const newData = { ...data, userId: 2 };
+    const newData = {
+      ...data,
+      lastRegister: "",
+      impediments: false,
+      userId: 2,
+    };
     try {
-      await addStudent(newData);
-      toast.success("Aluno adicionado com sucesso", {
-        theme: "dark",
-      });
-      setStudentsList([]);
+      const student = await addStudent(newData);
+      toast.success("Aluno adicionado com sucesso");
+      setTemporaryStudents(student);
       setIsAddModal(false);
     } catch (err) {
-      toast.error("Não foi possível adicionar o aluno", {
-        theme: "dark",
-      });
-      console.log(err);
+      toast.error("Não foi possível adicionar o aluno");
     }
   }
 
