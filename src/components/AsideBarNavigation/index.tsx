@@ -7,7 +7,6 @@ import { UserContext } from "../../context/UserContext";
 import { AsideStyle } from "./style";
 
 export const AsideBar = () => {
-    
   const { userAvatar } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -28,7 +27,7 @@ export const AsideBar = () => {
             <MdSignalCellularAlt />
           </Link>
 
-          <Link to="">
+          <Link to="/registro_pontos">
             <BsBoxSeam />
           </Link>
 

@@ -73,5 +73,15 @@ export const registerStudentCheckIn = async (
   dataInput: IRegisterCheckInStudentsProps
 ) => {
   await api.patch(`/students/${studentId}`, dataInput);
+};
 
+export const getCheckinsByDate = async (
+  userId: number,
+  month: number,
+  year: number
+): Promise<ICheckInStudentResponse[]> => {
+  const { data } = await api.get<ICheckInStudentResponse[]>(
+    `checkin?userId=${userId}&month=${month}&year=${year}`
+  );
+  return data;
 };

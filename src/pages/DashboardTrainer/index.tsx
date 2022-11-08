@@ -6,7 +6,6 @@ import { CheckinBox } from "../../components/CheckinBox";
 import { HeaderDashboard } from "../../components/HeaderDashboard";
 import { UserContext } from "../../context/UserContext";
 import { DashboardTrainerStyle } from "./style";
-import { useAuthContext } from "../../context/AuthContext";
 
 export const DashboardTrainer = () => {
   const {
@@ -16,11 +15,8 @@ export const DashboardTrainer = () => {
     setCheckinSchedule,
   } = useContext(UserContext);
 
-
   useEffect(() => {
-
     setCheckinSchedule({ start: "09:00", end: "21:00" });
-
   }, []);
 
   useEffect(() => {

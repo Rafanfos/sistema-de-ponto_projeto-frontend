@@ -5,7 +5,6 @@ import { CheckinBox } from "../../components/CheckinBox";
 import { HeaderDashboard } from "../../components/HeaderDashboard";
 import { StudentAttendance } from "../../components/StudentAttendance";
 import { UserTable } from "../../components/UserTable";
-import { useAuthContext } from "../../context/AuthContext";
 import { UserContext } from "../../context/UserContext";
 import { DashboardStudentStyle } from "./style";
 
@@ -16,12 +15,10 @@ export const DashboardStudent = () => {
     checkinSchedule,
     setCheckinSchedule,
   } = useContext(UserContext);
-
-
+  const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
 
   useEffect(() => {
     setCheckinSchedule({ start: "09:00", end: "14:00" });
-
   }, []);
 
   useEffect(() => {
@@ -55,7 +52,7 @@ export const DashboardStudent = () => {
         <HeaderDashboard />
         <CheckinBox />
         <StudentAttendance />
-        <UserTable />
+        <UserTable userIdProps={userId} />
       </div>
     </DashboardStudentStyle>
   );

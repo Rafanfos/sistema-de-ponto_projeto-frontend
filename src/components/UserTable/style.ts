@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const UserTableStyle = styled.div`
   margin-top: 1.5rem;
   overflow-x: auto;
-  width: 90%;
+  max-width: 480px;
+  width: 100%;
 
   &::-webkit-scrollbar {
     height: 8px;
