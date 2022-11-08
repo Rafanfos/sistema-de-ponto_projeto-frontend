@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const RegistersTrainerStyle = styled.main`
-  margin-left: 84px;
+  padding-left: unset;
+
   .main__container {
     display: flex;
     flex-direction: column;
@@ -10,6 +11,7 @@ export const RegistersTrainerStyle = styled.main`
     max-width: 1000px;
     gap: 12px;
     margin: 0 auto;
+    align-items: center;
 
     @media (min-width: 768px) {
       flex-direction: row;
@@ -82,5 +84,9 @@ export const RegistersTrainerStyle = styled.main`
     border: 1px solid transparent;
     border-radius: 8px;
     outline: var(--color-primary);
+  }
+
+  @media (min-width: 768px) {
+    padding-left: 84px;
   }
 `;
