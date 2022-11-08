@@ -18,18 +18,18 @@ export const DashboardStudent = () => {
     setCheckinSchedule,
     setUserInfo,
   } = useContext(UserContext);
+  const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
+  const token = localStorage.getItem("@token:SistemaDePontos");
 
   useEffect(() => {
     setCheckinSchedule({ start: "09:00", end: "18:00" });
 
     const studentInfo = async () => {
-      const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
-      const token = localStorage.getItem("@token:SistemaDePontos");
       api.defaults.headers.authorization = `Bearer ${token}`;
       const info = await getStudentInfo(userId);
       setUserInfo(info);
     };
-   studentInfo();
+    studentInfo();
   }, []);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export const DashboardStudent = () => {
         <HeaderDashboard />
         <CheckinBox />
         <StudentAttendance />
-        <UserTable />
+        <UserTable userIdProps={userId} />
       </div>
     </DashboardStudentStyle>
   );

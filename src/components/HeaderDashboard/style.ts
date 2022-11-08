@@ -28,11 +28,11 @@ export const HeaderDashboardStyle = styled.header`
     }
     h2 {
       font-weight: 500;
-      font-size: 32px;
+      font-size: 30px;
     }
 
     p {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 400;
     }
   }
