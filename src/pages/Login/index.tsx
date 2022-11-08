@@ -2,17 +2,16 @@ import LoginImage from "../../components/LoginPageImage/image";
 import PageLogin from "./style";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { toast } from "react-toastify";
 import { CiMail } from "react-icons/ci";
 import { FiKey } from "react-icons/fi";
 import { BsCheck, BsEye, BsEyeSlash } from "react-icons/bs";
 import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { IGetStudentInfoResponse } from "../../services/api/students/interfaces";
-import { useNavigate } from "react-router-dom";
-import { login } from "../../services/api/commom/requests";
-import { ILoginProps } from "../../services/api/commom/interface";
+import { IUser, useAuthContext } from "../../context/AuthContext";
 import { UserContext } from "../../context/UserContext";
+
+
 
 const schema = yup.object({
     email: yup
@@ -39,31 +38,15 @@ const Login = () => {
     const [viewPassword, setViewPassword] = useState(false);
     const [typeInputPassword, setTypeInputPassword] = useState("password");
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+    const {login_onSubmit} = useAuthContext();
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<IFormLogin>({
+    } = useForm<IUser>({
         resolver: yupResolver(schema),
     });
-
-    const navigate = useNavigate();
-    const onSubmit = async (dataInput: ILoginProps) => {
-        try {
-            const data = await login(dataInput);
-            localStorage.setItem("@token:SistemaDePontos", data.accessToken);
-            localStorage.setItem("@userId:SistemaDePontos", data.user.id + "");
-
-            data.user.is_trainer
-                ? navigate("/dashboard_instrutor", { replace: true })
-                : navigate("/dashboard_aluno", { replace: true });
-        } catch (error) {
-            toast.error("Usuário ou senha inválidos");
-        } finally {
-            getUserInfo();
-        }
-    };
 
     return (
         <PageLogin>
@@ -74,7 +57,7 @@ const Login = () => {
                     <p>Bem vindo a</p>
                     <h1>Kenzie Academy</h1>
 
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(login_onSubmit)}>
                         <div className="div_input">
                             <CiMail className="figure_input" />
                             <div>

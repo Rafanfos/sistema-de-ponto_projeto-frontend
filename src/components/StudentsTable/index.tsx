@@ -11,6 +11,7 @@ import { DeleteStudentModal } from "../DeleteStudentModal";
 import { AddStudentModal } from "../AddStudentModal";
 import api from "../../services/api/api";
 import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
+import { useAuthContext } from "../../context/AuthContext";
 
 export const StudentsTable = () => {
 
@@ -27,10 +28,11 @@ export const StudentsTable = () => {
     setStudentDelete(student);
   }
 
+  const {user} = useAuthContext()
+
   useEffect(() => {
     async function listStudents() {
-      // const userId = localStorage.getItem("@UserId")
-      const list = await getStudents(2);
+      const list = await getStudents(user.userId);
 
       list.map(async (student) => {
         const listCheckIn = await getCheckInStudents(student.studentId);
@@ -52,7 +54,6 @@ export const StudentsTable = () => {
 
   useEffect(() => {
     const listStundents = async () => {
-      // const userId = localStorage.getItem("@UserId")
       const students = await getStudents(2);
       setStudentsList(students);
     };

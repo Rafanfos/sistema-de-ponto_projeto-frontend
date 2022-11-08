@@ -1,12 +1,19 @@
 import { useContext } from "react";
 import { BsBoxSeam, BsGear } from "react-icons/bs";
 import { MdSignalCellularAlt } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { IoExitOutline } from "react-icons/io5";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { AsideStyle } from "./style";
 
 export const AsideBar = () => {
   const { userAvatar } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const logoutUser = () => {
+    localStorage.clear();
+    navigate("/");
+  };
 
   return (
     <AsideStyle>
@@ -15,17 +22,23 @@ export const AsideBar = () => {
       </figure>
 
       <nav>
-        <Link to="/dashboard_instrutor">
-          <MdSignalCellularAlt />
-        </Link>
+        <div>
+          <Link to="/dashboard_instrutor">
+            <MdSignalCellularAlt />
+          </Link>
 
-        <Link to="/registro_pontos">
-          <BsBoxSeam />
-        </Link>
+          <Link to="/registro_pontos">
+            <BsBoxSeam />
+          </Link>
 
-        <Link to="/configuracoes_conta">
-          <BsGear />
-        </Link>
+          <Link to="/configuracoes_conta">
+            <BsGear />
+          </Link>
+        </div>
+
+        <button onClick={() => logoutUser()}>
+          <IoExitOutline />
+        </button>
       </nav>
     </AsideStyle>
   );
