@@ -5,10 +5,12 @@ import * as yup from "yup";
 import { CiMail } from "react-icons/ci";
 import { FiKey } from "react-icons/fi";
 import { BsCheck, BsEye, BsEyeSlash } from "react-icons/bs";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { IGetStudentInfoResponse } from "../../services/api/students/interfaces";
 import { IUser, useAuthContext } from "../../context/AuthContext";
+
+
 
 const schema = yup.object({
     email: yup
@@ -29,6 +31,9 @@ export interface ILoginForm {
 }
 
 const Login = () => {
+
+    const { getUserInfo } = useContext(UserContext)
+
     const [viewPassword, setViewPassword] = useState(false);
     const [typeInputPassword, setTypeInputPassword] = useState("password");
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);

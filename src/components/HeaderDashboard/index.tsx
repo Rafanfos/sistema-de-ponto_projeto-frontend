@@ -1,9 +1,13 @@
+
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+
 import { HeaderDashboardStyle } from "./style";
 
 export const HeaderDashboard = () => {
+
   const { user } = useContext(AuthContext);
+
 
   return (
     <HeaderDashboardStyle>
@@ -15,7 +19,6 @@ export const HeaderDashboard = () => {
         <h2>Bem vindo {user.name}</h2>
         <p>31/10/2022</p>
       </div>
-
     </HeaderDashboardStyle>
   );
 };

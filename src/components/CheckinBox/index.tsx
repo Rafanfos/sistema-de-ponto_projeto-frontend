@@ -28,6 +28,7 @@ export const CheckinBox = () => {
 
   const checkin = async (info: IUser, data: IData) => {
     const {userId, is_trainer, name} = user;
+
     const date = new Date();
     const day = Number(date.getDate() - 1);
     const month = Number(date.getMonth() + 1);
@@ -36,7 +37,7 @@ export const CheckinBox = () => {
     let minutes = String(date.getMinutes());
     let checkinHour = +start.slice(0, 2);
     let checkoutHour = +end.slice(0, 2);
-    let toleranceMin = 15;
+    let toleranceMin = 20;
 
     if (hours.length === 1) {
       hours = `0${hours}`;
@@ -75,8 +76,8 @@ export const CheckinBox = () => {
       userId: userId,
     };
 
-    console.log(body);
-    is_trainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
+    isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
+
   };
 
   return (

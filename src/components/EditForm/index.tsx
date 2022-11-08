@@ -1,52 +1,110 @@
-import { InputDefault } from "../InputDefault";
 import { EditFormStyle } from "./style";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IEditTrainerInfoProps } from "../../services/api/trainer/interfaces";
+import { toast } from "react-toastify";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
-const schema = yup.object().shape({
-  name: yup.string(),
-  oldEmail: yup.string().email("Não é um e-mail válido"),
-  email: yup.string().email("Não é um e-mail válido"),
-  confirmNewEmail: yup
-    .string()
-    .oneOf([yup.ref("email")], "Os e-mails devem ser correspondentes"),
-});
+const schema = yup.object().shape(
+  {
+    oldEmail: yup
+      .string()
+      .email("Não é um e-mail válido")
+      .when("email", {
+        is: yup.reach,
+        then: yup.string().required("O campo é obrigatório"),
+      }),
+
+    email: yup
+      .string()
+      .email("Não é um e-mail válido")
+      .when("oldEmail", {
+        is: yup.reach,
+        then: yup
+          .string()
+          .required("O campo é obrigatório")
+          .notOneOf([yup.ref("oldEmail")], "Os e-mails devem ser diferentes"),
+      }),
+
+    confirmNewEmail: yup
+      .string()
+      .oneOf([yup.ref("email")], "Os e-mails devem ser correspondentes")
+      .when("oldEmail", {
+        is: yup.reach,
+        then: yup.string().required("O campo é obrigatório"),
+      }),
+  },
+  [["oldEmail", "email"]]
+);
 
 export const EditForm = () => {
+  const { userInfo, editUserInfo, userAvatar, setUserAvatar } =
+    useContext(UserContext);
+
   const {
     register,
     watch,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<IEditTrainerInfoProps>({
     resolver: yupResolver(schema),
     mode: "onChange",
+    defaultValues: {
+      name: "",
+      oldEmail: "",
+      email: "",
+      confirmNewEmail: "",
+      avatar: [],
+    },
   });
 
-  const editButton = () => {
-    const verifyInputPhoto = watch("avatar");
+  const convertToBase64 = () => {
+    if (watch("avatar")?.length === 1) {
+      const readFile = new FileReader();
 
-    if (verifyInputPhoto?.length === 1) {
+      readFile.readAsDataURL(watch("avatar")[0]);
+      readFile.onload = () => {
+        setUserAvatar(readFile.result?.toString());
+      };
       return true;
+    }
+  };
+  convertToBase64();
+
+  const verifyInputs = () => {
+    if (
+      watch("name") !== "" ||
+      watch("avatar").length === 1 ||
+      (watch("oldEmail") !== "" &&
+        watch("email") !== "" &&
+        watch("confirmNewEmail") !== "")
+    ) {
+      return true;
+    } else {
+      return false;
     }
   };
 
   const editInfoAccount = (data: IEditTrainerInfoProps) => {
-    const { name, email, avatar } = data;
+    const { name, email, oldEmail } = data;
 
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const treatedObject = {
-        name: name !== "" ? name : "vazio",
-        email: email !== "" ? email : "vazio",
-        avatar: avatar,
-      };
+    const treatedObject = {
+      name: name !== "" ? name : userInfo[0]?.name,
+      email: email !== "" ? email : userInfo[0]?.email,
+      avatar: userAvatar ? userAvatar : userInfo[0]?.avatar,
+    };
 
-    } catch (error) {
-      console.error(error);
+    if (oldEmail !== userInfo[0]?.email && oldEmail !== "") {
+      toast.error("E-mail antigo incorreto");
+    } else {
+      editUserInfo(treatedObject);
+      setUserAvatar(userAvatar);
     }
+
+    reset();
   };
 
   return (
@@ -55,15 +113,15 @@ export const EditForm = () => {
         <div className="flexBox">
           <div>
             <h3>Nome</h3>
-            <InputDefault
-              placeholder="Digite aqui o seu novo nome ..."
+            <input
+              placeholder="Digite aqui o seu novo nome..."
               className="inputStyle"
               {...register("name")}
             />
 
             <h3>Email</h3>
             <label>Email antigo</label>
-            <InputDefault
+            <input
               placeholder="Digite aqui o seu email anterior."
               className="inputStyle"
               {...register("oldEmail")}
@@ -71,36 +129,35 @@ export const EditForm = () => {
             <small>{errors.oldEmail?.message}</small>
 
             <label>Email novo</label>
-            <InputDefault
+            <input
               placeholder="Escreva aqui o seu email."
               className="inputStyle"
               {...register("email")}
             />
             <small>{errors.email?.message}</small>
-            <InputDefault
+            <input
               placeholder="Escreva novamente o seu email."
               className="inputStyle"
-              register={register("confirmNewEmail")}
+              {...register("confirmNewEmail")}
             />
             <small>{errors.confirmNewEmail?.message}</small>
           </div>
           <div>
             <h3>Foto</h3>
 
-            <InputDefault
+            <input
               className="inputStyle"
               type="file"
               {...register("avatar")}
-              disabled={editButton()}
+              disabled={convertToBase64()}
             />
-            <img
-              src="https://pbs.twimg.com/media/ETr0ATXWsAAS1Uz.jpg"
-              alt="Imagem do Kirby"
-            />
+            <img src={userAvatar} alt="Imagem do Kirby" />
           </div>
         </div>
 
-        <button type="submit">Confirmar alteração</button>
+        <button type="submit" disabled={!verifyInputs()}>
+          Confirmar alteração
+        </button>
       </form>
     </EditFormStyle>
   );

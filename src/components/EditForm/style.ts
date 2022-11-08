@@ -34,6 +34,13 @@ export const EditFormStyle = styled.div`
         font-weight: 400;
         height: 35px;
         width: 100%;
+        padding: 10px 15px;
+        background-color: var(--grey-4);
+        border: 1px solid transparent;
+        border-radius: 8px;
+        :focus {
+          border: 1px solid var(--grey-1);
+        }
 
         &:nth-child(2) {
           margin-bottom: 0.313rem;
@@ -76,9 +83,22 @@ export const EditFormStyle = styled.div`
 
       small {
         align-self: flex-start;
+        display: block;
         color: #ff0000;
-        padding-top: 0.425rem;
+        padding-top: 0.325rem;
         font-size: 12px;
+
+        &:nth-child(6) {
+          margin-bottom: 0.438rem;
+        }
+
+        &:nth-child(9) {
+          margin-bottom: 0.438rem;
+        }
+
+        &:nth-child(11) {
+          margin-bottom: 0.625rem;
+        }
       }
 
       img {
@@ -104,6 +124,16 @@ export const EditFormStyle = styled.div`
       background-color: var(--color-primary);
       border: none;
       border-radius: 8px;
+      transition: 0.8s;
+
+      &:disabled {
+        background-color: var(--color-light);
+      }
+
+      &:hover:enabled {
+        background-color: var(--color-secondary);
+        transition: 0.8s;
+      }
     }
   }
 
@@ -141,16 +171,23 @@ export const EditFormStyle = styled.div`
             &:nth-child(2) {
               margin-bottom: 1.438rem;
             }
+          }
 
-            &:nth-child(5) {
+          label {
+            font-size: 20px;
+            padding-bottom: 0.25rem;
+          }
+
+          small {
+            &:nth-child(6) {
               margin-bottom: 0.75rem;
             }
 
-            &:nth-child(8) {
+            &:nth-child(9) {
               margin-bottom: 0.625rem;
             }
 
-            &:nth-child(10) {
+            &:nth-child(11) {
               margin-bottom: 0;
             }
           }

@@ -6,6 +6,7 @@ export interface IGetStudentInfoResponse {
   class: "T13";
   id: number;
   userId: number;
+  avatar?: any;
 }
 
 export interface ICheckInStudentProps {
@@ -34,7 +35,7 @@ export interface ICheckInStudentResponse {
 export interface IEditStudentInfoProps {
   email: string;
   name: string;
-  avatar: string;
+  avatar?: any;
   oldEmail?: string;
   confirmNewEmail?: string;
 }

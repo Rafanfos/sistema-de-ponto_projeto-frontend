@@ -1,6 +1,15 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import { toast } from "react-toastify";
 import { IProvidersProps } from "../../providers";
+import api from "../../services/api/api";
 import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
+import { getTrainerInfo } from "../../services/api/trainer/requests";
 
 export interface IUserContextData {
   checkinSchedule: ICheckinData;
@@ -23,6 +32,10 @@ export interface IUserContextData {
   setUserInfo: Dispatch<SetStateAction<IGetTrainerInfoResponse[]>>;
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
+  editUserInfo: (data: IEditTrainerInfoProps) => Promise<void>;
+  userAvatar: string | undefined;
+  setUserAvatar: Dispatch<SetStateAction<string | undefined>>;
+  getUserInfo: () => Promise<void>;
 }
 
 export interface ICheckinData {
@@ -34,31 +47,61 @@ export const UserContext = createContext<IUserContextData>(
   {} as IUserContextData
 );
 
+export interface IEditTrainerInfoProps {
+  name?: string;
+  oldEmail?: string;
+  email?: string;
+  confirmNewEmail?: string;
+  avatar?: any;
+}
+
 const UserProviders = ({ children }: IProvidersProps) => {
   const [checkinSchedule, setCheckinSchedule] = useState<ICheckinData>(
     {} as ICheckinData
   );
   const [isTrainer, setIsTrainer] = useState(false);
   const [isDisable, setIsDisable] = useState({
-    checkin: false,
+    checkin: true,
     checkout: true,
   });
   const [userInfo, setUserInfo] = useState<IGetTrainerInfoResponse[]>([]);
-  const toleranceMin = 15;
+  const toleranceMin = 20;
   const [showModal, setShowModal] = useState(false);
+  const [userAvatar, setUserAvatar] = useState<string | undefined>(undefined);
 
   const checkinVerification = (difference: number) => {
-    console.log(difference, toleranceMin);
-    if (difference > toleranceMin) {
-      setIsDisable({ ...isDisable, checkin: true });
+    if (difference < toleranceMin) {
+      setIsDisable({ ...isDisable, checkin: false });
     }
   };
 
   const checkoutVerification = (difference: number) => {
-    if (difference > toleranceMin) {
-      setIsDisable({ checkin: true, checkout: true });
-    } else {
+    if (difference < toleranceMin) {
       setIsDisable({ checkin: true, checkout: false });
+    }
+  };
+
+  const getUserInfo = async () => {
+    const token = localStorage.getItem("@token:SistemaDePontos");
+
+    const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
+    api.defaults.headers.authorization = `Bearer ${token}`;
+    const info = await getTrainerInfo(userId);
+    setUserInfo(info);
+    setUserAvatar(info[0].avatar);
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  const editUserInfo = async (data: IEditTrainerInfoProps) => {
+    try {
+      const userId = localStorage.getItem("@userId:SistemaDePontos");
+      api.patch(`/users/${userId}`, data);
+      toast.success("Alteração feita com sucesso");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -77,6 +120,10 @@ const UserProviders = ({ children }: IProvidersProps) => {
         setUserInfo,
         showModal,
         setShowModal,
+        editUserInfo,
+        userAvatar,
+        setUserAvatar,
+        getUserInfo,
       }}
     >
       {children}
