@@ -11,7 +11,6 @@ interface IAuthProviderExports{
     loading: boolean;
     setLoading: Dispatch<SetStateAction<boolean>>;
     login_onSubmit: (data: IUser) => void;
-    isTrainer: () => void;
 }
 
 export interface IUser{
@@ -35,6 +34,7 @@ export const AuthProvider = ({children}:{children: ReactNode}) => {
     const [user, setUser] = useState<IUser>({} as IUser);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+
     useEffect(()=>{
         const loadUser = async () => {
             const token = localStorage.getItem('@token:SistemaDePontos');
@@ -44,7 +44,7 @@ export const AuthProvider = ({children}:{children: ReactNode}) => {
                     api.defaults.headers.authorization = `Bearer ${token}`;
                     const {data} =  await api.get<IUser[]>(`users?id=${userId}`)
                     setUser(data[0]);
-                    if (user.is_trainer) {
+                    if (data[0].is_trainer) {
                         navigate("/dashboard_instrutor")
                     } else {
                         navigate("/dashboard_aluno")
@@ -58,14 +58,9 @@ export const AuthProvider = ({children}:{children: ReactNode}) => {
         loadUser()
     }, [])
 
-    const isTrainer = () => {
-        if (user.is_trainer) {
-            navigate("dashboard_instrutor")
-        } else {
-            navigate("dashboard_aluno")
-        }
-    }
-    
+    useEffect(()=>{
+        console.log(user)
+    },[user])
 
     const login_onSubmit = async (data: IUser) => {
         try {
@@ -109,8 +104,7 @@ export const AuthProvider = ({children}:{children: ReactNode}) => {
             setUser,
             loading,
             setLoading,
-            login_onSubmit,
-            isTrainer
+            login_onSubmit
         }}>
             {children}
         </AuthContext.Provider>

@@ -16,11 +16,9 @@ export const DashboardTrainer = () => {
     setCheckinSchedule,
   } = useContext(UserContext);
 
-  const {isTrainer} = useAuthContext()
 
   useEffect(() => {
     setCheckinSchedule({ start: "09:00", end: "21:00" });
-    isTrainer()
   }, []);
 
   useEffect(() => {
