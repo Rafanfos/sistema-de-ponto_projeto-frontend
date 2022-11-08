@@ -13,6 +13,7 @@ export const DashboardTrainer = () => {
     checkoutVerification,
     checkinSchedule,
     setCheckinSchedule,
+    setIsTrainer,
   } = useContext(UserContext);
 
   useEffect(() => {
@@ -21,6 +22,7 @@ export const DashboardTrainer = () => {
 
   useEffect(() => {
     const getDifference = () => {
+      setIsTrainer(true);
       const date = new Date();
       const time = date.getHours() * 60 + date.getMinutes();
       let difference = 0;

@@ -14,6 +14,7 @@ export const DashboardStudent = () => {
     checkoutVerification,
     checkinSchedule,
     setCheckinSchedule,
+    setIsTrainer,
   } = useContext(UserContext);
   const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
 
@@ -23,6 +24,8 @@ export const DashboardStudent = () => {
 
   useEffect(() => {
     const getDifference = () => {
+      setIsTrainer(false);
+
       const date = new Date();
       const time = date.getHours() * 60 + date.getMinutes();
       let difference = 0;

@@ -7,7 +7,7 @@ import { UserContext } from "../../context/UserContext";
 import { AsideStyle } from "./style";
 
 export const AsideBar = () => {
-  const { userAvatar } = useContext(UserContext);
+  const { userAvatar, isTrainer } = useContext(UserContext);
   const navigate = useNavigate();
 
   const logoutUser = () => {
@@ -23,13 +23,21 @@ export const AsideBar = () => {
 
       <nav>
         <div>
-          <Link to="/dashboard_instrutor">
-            <MdSignalCellularAlt />
-          </Link>
+          {isTrainer ? (
+            <Link to="/dashboard_instrutor">
+              <MdSignalCellularAlt />
+            </Link>
+          ) : (
+            <Link to="/dashboard_aluno">
+              <MdSignalCellularAlt />
+            </Link>
+          )}
 
-          <Link to="/registro_pontos">
-            <BsBoxSeam />
-          </Link>
+          {isTrainer && (
+            <Link to="/registro_pontos">
+              <BsBoxSeam />
+            </Link>
+          )}
 
           <Link to="/configuracoes_conta">
             <BsGear />
