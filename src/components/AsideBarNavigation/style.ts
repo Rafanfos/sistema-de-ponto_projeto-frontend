@@ -23,14 +23,34 @@ export const AsideStyle = styled.aside`
   }
 
   nav {
-    margin-right: 1.563rem;
     display: flex;
-    gap: 1.563rem;
+    align-items: center;
 
-    a {
-      font-size: 23px;
+    div {
+      margin-right: 1.533rem;
+      display: flex;
+      gap: 1.563rem;
+
+      a {
+        font-size: 23px;
+        color: #ffffff;
+        transition: 0.9s;
+
+        &:hover {
+          color: var(--color-secondary);
+          transition: 0.9s;
+        }
+      }
+    }
+
+    button {
+      background-color: transparent;
+      border: none;
+      font-size: 28px;
       color: #ffffff;
       transition: 0.9s;
+      margin-top: 0.188rem;
+      margin-right: 1.563rem;
 
       &:hover {
         color: var(--color-secondary);
@@ -60,12 +80,25 @@ export const AsideStyle = styled.aside`
     }
 
     nav {
-      margin-right: unset;
-      margin-top: 4.875rem;
+      height: 100%;
       flex-direction: column;
 
-      a {
-        font-size: 32px;
+      div {
+        margin-right: unset;
+        margin-top: 4.875rem;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+
+        a {
+          font-size: 32px;
+        }
+      }
+      button {
+        font-size: 38px;
+        margin-right: unset;
+        margin-bottom: 2.5rem;
+        transition: 0.9s;
       }
     }
   }
