@@ -1,20 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { VscCircleLargeOutline } from "react-icons/vsc";
 import { FiTrash2 } from "react-icons/fi";
-import {
-  getCheckInStudents,
-  getStudents,
-} from "../../services/api/trainer/requests";
+import { getStudents } from "../../services/api/trainer/requests";
 import { ContainerStudentsStyle, StudentsTableStyle } from "./style";
 import { DeleteStudentModal } from "../DeleteStudentModal";
 import { AddStudentModal } from "../AddStudentModal";
-import api from "../../services/api/api";
 import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
 import { useAuthContext } from "../../context/AuthContext";
 
 export const StudentsTable = () => {
-
   const [studentsList, setStudentsList] = useState<
     IRegisterCheckInStudentsProps[] | []
   >([]);
@@ -31,34 +27,12 @@ export const StudentsTable = () => {
   const {user} = useAuthContext()
 
   useEffect(() => {
-    async function listStudents() {
-      const list = await getStudents(user.userId);
-
-      list.map(async (student) => {
-        const listCheckIn = await getCheckInStudents(student.studentId);
-        const lastRegister = listCheckIn[listCheckIn.length - 1];
-        if (lastRegister) {
-          const { day, month, year, schedule } = lastRegister;
-          const lastRegisterDate = `${schedule} | ${day}/${month}/${year}`;
-
-          const lastRegisterImp = lastRegister.impediments;
-          await api.patch(`/students/${student.studentId}`, {
-            lastRegister: lastRegisterDate,
-            impediments: lastRegisterImp,
-          });
-        }
-      });
-    }
-    listStudents();
-  }, []);
-
-  useEffect(() => {
-    const listStundents = async () => {
-      const students = await getStudents(2);
+    const listStudents = async () => {
+      const students = await getStudents(user.userId);
       setStudentsList(students);
     };
-    listStundents();
-  }, [studentsList]);
+    listStudents();
+  }, []);
 
   return (
     <>
@@ -66,7 +40,6 @@ export const StudentsTable = () => {
         <DeleteStudentModal
           setIsDeleteModal={setIsDeleteModal}
           studentDelete={studentDelete}
-          studentsList={studentsList}
           setStudentsList={setStudentsList}
         />
       ) : null}
@@ -162,5 +135,4 @@ export const StudentsTable = () => {
       </StudentsTableStyle>
     </>
   );
-
 };

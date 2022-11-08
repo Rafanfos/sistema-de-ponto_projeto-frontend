@@ -5,8 +5,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IData } from "../../CheckinBox";
-import { AuthContext, IUser } from "../../../context/AuthContext";
-
+import { IUser, useAuthContext } from "../../../context/AuthContext";
 
 interface IModalCheckinProps {
   checkin: (info: IUser, data: IData) => Promise<void>;
@@ -17,8 +16,7 @@ const formSchema = yup.object().shape({
 });
 
 const CheckinStudentModal = ({ checkin }: IModalCheckinProps) => {
-
-  const { user } = useContext(AuthContext);
+  const { user } = useAuthContext();
   const { setShowModal } = useContext(UserContext);
   const [isDisable, setIsDisable] = useState(true);
   const [impediment, setImpediment] = useState("");

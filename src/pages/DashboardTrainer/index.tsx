@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from "react";
-import { StudentsTable } from "../../components/StudentsTable";
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
 import { HeaderDashboard } from "../../components/HeaderDashboard";
+import { StudentsTable } from "../../components/StudentsTable";
 import { UserContext } from "../../context/UserContext";
 import { DashboardTrainerStyle } from "./style";
 
@@ -21,9 +21,14 @@ export const DashboardTrainer = () => {
   }, []);
 
   useEffect(() => {
+    setIsTrainer(true);
+
     const getDifference = () => {
       setIsTrainer(true);
       const date = new Date();
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
       const time = date.getHours() * 60 + date.getMinutes();
       let difference = 0;
       if (checkinSchedule.start && checkinSchedule.end) {
@@ -36,9 +41,8 @@ export const DashboardTrainer = () => {
           difference = time - checkinTime;
           checkinVerification(difference);
         } else {
-          console.log(difference);
           difference = time - checkoutTime;
-          checkoutVerification(difference);
+          checkoutVerification(day, month, year);
         }
       }
     };

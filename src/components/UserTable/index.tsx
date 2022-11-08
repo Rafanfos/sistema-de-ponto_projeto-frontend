@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { UserContext } from "../../context/UserContext";
@@ -20,7 +21,7 @@ export const UserTable = ({ userIdProps }: IUserTableProps) => {
   const [sortedCheckinsDate, setSortedCheckinsDate] = useState(true);
   const [sortedCheckinsStatus, setSortedCheckinsStatus] = useState(true);
 
-  useEffect(() => {
+    useEffect(() => {
     async function checkinUser() {
       try {
         const { data } = await api.get(`/checkin?userId=${userIdProps}`);

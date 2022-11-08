@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react";
+import { getCheckinPoints } from "../../services/api/commom/requests";
 import { PercentageDivStyle } from "./style";
 
 export const StudentAttendance = () => {
   const [percentage, setPercentage] = useState<string>("100");
 
   useEffect(() => {
-    setPercentage(Math.floor(Math.random() * 101).toString());
+    const updateGrade = async () => {
+      const userId = localStorage.getItem("@userId:SistemaDePontos") || "";
+      const checkinPoints = await getCheckinPoints(+userId);
+      const attendCheckinPoints = checkinPoints.filter(
+        ({ status }) => status === "attend"
+      );
+      setPercentage(
+        `${(attendCheckinPoints.length / checkinPoints.length) * 100}`
+      );
+    };
+    updateGrade();
   }, []);
 
   return (
