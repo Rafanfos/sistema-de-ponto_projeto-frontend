@@ -2,11 +2,16 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AddStudentModalStyle } from "./style";
-import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
-import { addStudent } from "../../services/api/trainer/requests";
+import {
+  IAddStudentProps,
+  IRegisterCheckInStudentsProps,
+} from "../../services/api/trainer/interfaces";
+import {
+  addStudent,
+  getCheckInStudents,
+  getStudents,
+} from "../../services/api/trainer/requests";
 import { toast } from "react-toastify";
-import { useContext } from "react";
-import { UserContext } from "../../context/UserContext";
 
 interface IAddStudentModal {
   setIsAddModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,14 +19,7 @@ interface IAddStudentModal {
     React.SetStateAction<[] | IRegisterCheckInStudentsProps[]>
   >;
 }
-interface IAddStudent {
-  email: string;
-  name: string;
-  userId: number;
-  studentId: number;
-  lastRegister: string;
-  impediments: boolean;
-}
+
 const schemaAddStudent = yup.object({
   name: yup.string().required("Nome obrigatório"),
   email: yup.string().required("Email obrigatório").email("Email inválido"),
@@ -32,30 +30,51 @@ export const AddStudentModal = ({
   setIsAddModal,
   setStudentsList,
 }: IAddStudentModal) => {
-  const { setTemporaryStudents } = useContext(UserContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IAddStudent>({
+  } = useForm<IAddStudentProps>({
     resolver: yupResolver(schemaAddStudent),
   });
 
-  async function handleSubmitFunction(data: IAddStudent) {
-    // const id = localStorage.getItem("@userId")
-    const newData = {
+  async function handleSubmitFunction(data: IAddStudentProps) {
+    const listCheckIn = await getCheckInStudents(data.studentId);
+
+    const lastRegister = listCheckIn[listCheckIn.length - 1];
+
+    let newData = {
       ...data,
       lastRegister: "",
       impediments: false,
       userId: 2,
+      id: data.studentId,
     };
+
+    if (lastRegister) {
+      const { day, month, year, schedule } = lastRegister;
+      const lastRegisterDate = `${schedule} | ${day}/${month}/${year}`;
+
+      const lastRegisterImp = lastRegister.impediments;
+
+      newData = {
+        ...data,
+        lastRegister: lastRegisterDate,
+        impediments: lastRegisterImp,
+        userId: 2,
+        id: data.studentId,
+      };
+    }
+
     try {
-      const student = await addStudent(newData);
+      await addStudent(newData);
       toast.success("Aluno adicionado com sucesso");
-      setTemporaryStudents(student);
       setIsAddModal(false);
     } catch (err) {
       toast.error("Não foi possível adicionar o aluno");
+    } finally {
+      const students = await getStudents(2);
+      setStudentsList(students);
     }
   }
 

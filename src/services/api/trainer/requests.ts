@@ -43,10 +43,16 @@ export const getStudents = async (
 };
 
 export const getCheckInStudents = async (
-  userId: number
+  userId: number,
+  day?: number,
+  month?: number,
+  year?: number
 ): Promise<ICheckInStudentResponse[]> => {
   const { data } = await api.get<ICheckInStudentResponse[]>(
-    `checkin?userId=${userId}`
+    `checkin?userId=${userId}`,
+    {
+      params: { day: day, month: month, year: year },
+    }
   );
   return data;
 };
@@ -73,5 +79,4 @@ export const registerStudentCheckIn = async (
   dataInput: IRegisterCheckInStudentsProps
 ) => {
   await api.patch(`/students/${studentId}`, dataInput);
-
 };

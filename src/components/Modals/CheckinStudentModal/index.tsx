@@ -8,7 +8,6 @@ import { IGetTrainerInfoResponse } from "../../../services/api/trainer/interface
 import { IData } from "../../CheckinBox";
 import { getStudentInfo } from "../../../services/api/students/requests";
 
-
 interface IModalCheckinProps {
   checkin: (info: IGetTrainerInfoResponse[], data: IData) => Promise<void>;
 }

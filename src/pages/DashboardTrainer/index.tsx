@@ -16,6 +16,7 @@ export const DashboardTrainer = () => {
     checkinSchedule,
     setCheckinSchedule,
     setUserInfo,
+    setIsTrainer,
   } = useContext(UserContext);
 
   useEffect(() => {
@@ -32,8 +33,13 @@ export const DashboardTrainer = () => {
   }, []);
 
   useEffect(() => {
+    setIsTrainer(true);
+
     const getDifference = () => {
       const date = new Date();
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
       const time = date.getHours() * 60 + date.getMinutes();
       let difference = 0;
       if (checkinSchedule.start && checkinSchedule.end) {
@@ -46,9 +52,8 @@ export const DashboardTrainer = () => {
           difference = time - checkinTime;
           checkinVerification(difference);
         } else {
-          console.log(difference);
           difference = time - checkoutTime;
-          checkoutVerification(difference);
+          checkoutVerification(day, month, year);
         }
       }
     };

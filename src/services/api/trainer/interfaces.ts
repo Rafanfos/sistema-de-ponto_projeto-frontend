@@ -13,6 +13,8 @@ export interface IAddStudentProps {
   name: string;
   userId: number;
   studentId: number;
+  lastRegister: string;
+  impediments: boolean;
 }
 
 export interface IAddStudentResponse {

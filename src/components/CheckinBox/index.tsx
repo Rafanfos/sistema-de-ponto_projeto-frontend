@@ -1,8 +1,13 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
+import api from "../../services/api/api";
+import { registerPoint } from "../../services/api/commom/requests";
 import { checkInStudent } from "../../services/api/students/requests";
 import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
-import { checkInTrainer } from "../../services/api/trainer/requests";
+import {
+  checkInTrainer,
+  getCheckInStudents,
+} from "../../services/api/trainer/requests";
 import CheckinStudentModal from "../Modals/CheckinStudentModal";
 import { CheckinBoxStyle } from "./style";
 
@@ -14,6 +19,7 @@ export interface IData {
 export const CheckinBox = () => {
   const {
     isDisable,
+    setIsDisable,
     isTrainer,
     checkinSchedule,
     userInfo,
@@ -27,13 +33,14 @@ export const CheckinBox = () => {
   const checkin = async (info: IGetTrainerInfoResponse[], data: IData) => {
     const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
     const date = new Date();
-    const day = Number(date.getDate() - 1);
+    const day = Number(date.getDate());
     const month = Number(date.getMonth() + 1);
     const currentAge = Number(date.getFullYear());
     let hours = String(date.getHours());
     let minutes = String(date.getMinutes());
     let checkinHour = +start.slice(0, 2);
-    let checkoutHour = +end.slice(0, 2);
+    let checkoutHour = 18;
+    //+end.slice(0, 2);
     let toleranceMin = 20;
 
     if (hours.length === 1) {
@@ -72,10 +79,45 @@ export const CheckinBox = () => {
       status: statusCheckin,
       userId: userId,
     };
-    console.log(userId);
-    isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
+    try {
+      isTrainer ? checkInTrainer(body, userId) : checkInStudent(body, userId);
+      setIsDisable({ checkin: true, checkout: true });
+    } catch {}
+    +hours >= checkoutHour &&
+      pointRegister(userId, day, month, currentAge, info[0].name);
   };
-
+  const pointRegister = async (
+    userId: number,
+    day: number,
+    month: number,
+    year: number,
+    name: string
+  ) => {
+    const userCheckins = await getCheckInStudents(userId, day, month, year);
+    const token = localStorage.getItem("@token:SistemaDePontos");
+    api.defaults.headers.authorization = `Bearer ${token}`;
+    if (userCheckins.length > 1) {
+      const data = {
+        name: name,
+        day: day,
+        month: month,
+        year: year,
+        status: "attend",
+        userId: userId,
+      };
+      await registerPoint(data);
+    } else {
+      const data = {
+        name: name,
+        day: day,
+        month: month,
+        year: year,
+        status: "missing",
+        userId: userId,
+      };
+      await registerPoint(data);
+    }
+  };
   return (
     <CheckinBoxStyle>
       <div className="checkinInfo">

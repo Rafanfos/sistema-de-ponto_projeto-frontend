@@ -1,20 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { VscCircleLargeOutline } from "react-icons/vsc";
 import { FiTrash2 } from "react-icons/fi";
-import {
-  getCheckInStudents,
-  getStudents,
-} from "../../services/api/trainer/requests";
+import { getStudents } from "../../services/api/trainer/requests";
 import { ContainerStudentsStyle, StudentsTableStyle } from "./style";
 import { DeleteStudentModal } from "../DeleteStudentModal";
 import { AddStudentModal } from "../AddStudentModal";
 import api from "../../services/api/api";
 import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
-import { UserContext } from "../../context/UserContext";
 
 export const StudentsTable = () => {
-  const { temporaryStudents } = useContext(UserContext);
   const [studentsList, setStudentsList] = useState<
     IRegisterCheckInStudentsProps[] | []
   >([]);
@@ -29,40 +24,14 @@ export const StudentsTable = () => {
   }
 
   useEffect(() => {
-    async function listStudents() {
+    const listStudents = async () => {
       const token = localStorage.getItem("@token:SistemaDePontos");
       api.defaults.headers.authorization = `Bearer ${token}`;
-      const list = await getStudents(2);
-
-      list.map(async (student) => {
-        const listCheckIn = await getCheckInStudents(student.studentId);
-        const lastRegister = listCheckIn[listCheckIn.length - 1];
-        if (lastRegister) {
-          const { day, month, year, schedule } = lastRegister;
-          const lastRegisterDate = `${schedule} | ${day}/${month}/${year}`;
-
-          const lastRegisterImp = lastRegister.impediments;
-
-          const response = await api.patch(`/students/${student.id}`, {
-            lastRegister: lastRegisterDate,
-            impediments: lastRegisterImp,
-          });
-          // setStudentsList([
-          //   ...studentsList.filter((s) => s.id !== student.id),
-          //   response.data,
-          // ]);
-        }
-      });
-    }
-    getStudentList();
+      const students = await getStudents(2);
+      setStudentsList(students);
+    };
     listStudents();
-  }, [temporaryStudents]);
-
-  const getStudentList = async () => {
-    // const userId = localStorage.getItem("@UserId")
-    const students = await getStudents(2);
-    setStudentsList(students);
-  };
+  }, []);
 
   return (
     <>
@@ -70,7 +39,6 @@ export const StudentsTable = () => {
         <DeleteStudentModal
           setIsDeleteModal={setIsDeleteModal}
           studentDelete={studentDelete}
-          studentsList={studentsList}
           setStudentsList={setStudentsList}
         />
       ) : null}

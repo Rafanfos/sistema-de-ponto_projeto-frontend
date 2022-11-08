@@ -8,11 +8,11 @@ import {
 import { toast } from "react-toastify";
 import { IProvidersProps } from "../../providers";
 import api from "../../services/api/api";
+import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
 import {
-  IAddStudentResponse,
-  IGetTrainerInfoResponse,
-} from "../../services/api/trainer/interfaces";
-import { getTrainerInfo } from "../../services/api/trainer/requests";
+  getCheckInStudents,
+  getTrainerInfo,
+} from "../../services/api/trainer/requests";
 
 export interface IUserContextData {
   checkinSchedule: ICheckinData;
@@ -30,7 +30,7 @@ export interface IUserContextData {
     }>
   >;
   checkinVerification: (difference: number) => void;
-  checkoutVerification: (difference: number) => void;
+  checkoutVerification: (day: number, month: number, year: number) => void;
   userInfo: IGetTrainerInfoResponse[];
   setUserInfo: Dispatch<SetStateAction<IGetTrainerInfoResponse[]>>;
   showModal: boolean;
@@ -39,8 +39,6 @@ export interface IUserContextData {
   userAvatar: string | undefined;
   setUserAvatar: Dispatch<SetStateAction<string | undefined>>;
   getUserInfo: () => Promise<void>;
-  temporaryStudents: IAddStudentResponse;
-  setTemporaryStudents: Dispatch<SetStateAction<IAddStudentResponse>>;
 }
 
 export interface ICheckinData {
@@ -73,8 +71,6 @@ const UserProviders = ({ children }: IProvidersProps) => {
   const toleranceMin = 20;
   const [showModal, setShowModal] = useState(false);
   const [userAvatar, setUserAvatar] = useState<string | undefined>(undefined);
-  const [temporaryStudents, setTemporaryStudents] =
-    useState<IAddStudentResponse>({} as IAddStudentResponse);
 
   const checkinVerification = (difference: number) => {
     if (difference < toleranceMin) {
@@ -82,10 +78,18 @@ const UserProviders = ({ children }: IProvidersProps) => {
     }
   };
 
-  const checkoutVerification = (difference: number) => {
-    if (difference < toleranceMin) {
-      setIsDisable({ checkin: true, checkout: false });
-    }
+  const checkoutVerification = async (
+    day: number,
+    month: number,
+    year: number
+  ) => {
+    const userId = localStorage.getItem("@userId:SistemaDePontos") || "";
+    const token = localStorage.getItem("@token:SistemaDePontos");
+    api.defaults.headers.authorization = `Bearer ${token}`;
+    const checkout = await getCheckInStudents(+userId, day, month, year);
+    checkout.length > 1
+      ? setIsDisable({ checkin: true, checkout: true })
+      : setIsDisable({ checkin: true, checkout: false });
   };
 
   const getUserInfo = async () => {
@@ -93,9 +97,12 @@ const UserProviders = ({ children }: IProvidersProps) => {
 
     const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
     api.defaults.headers.authorization = `Bearer ${token}`;
-    const info = await getTrainerInfo(userId);
-    setUserInfo(info);
-    setUserAvatar(info[0].avatar);
+
+    if (userId) {
+      const info = await getTrainerInfo(userId);
+      setUserInfo(info);
+      setUserAvatar(info[0].avatar);
+    }
   };
 
   useEffect(() => {
@@ -131,8 +138,6 @@ const UserProviders = ({ children }: IProvidersProps) => {
         userAvatar,
         setUserAvatar,
         getUserInfo,
-        temporaryStudents,
-        setTemporaryStudents,
       }}
     >
       {children}
