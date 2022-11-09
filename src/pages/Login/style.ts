@@ -120,7 +120,7 @@ const PageLogin = styled.div`
             top: 16px;
         }
 
-        button {
+        .password-icon {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -129,6 +129,7 @@ const PageLogin = styled.div`
             height: 36px;
             margin: 0;
             position: absolute;
+            cursor: pointer;
 
             top: 12px;
             right: 15px;

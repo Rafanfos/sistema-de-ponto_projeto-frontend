@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const UserTableStyle = styled.div`
-  margin-top: 1.5rem;
   overflow-x: auto;
   max-width: 480px;
   width: 100%;
