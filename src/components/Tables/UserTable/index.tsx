@@ -100,9 +100,9 @@ export const UserTable = ({ userIdProps }: IUserTableProps) => {
               <h4>Data</h4>
               <button>
                 {sortedCheckinsDate ? (
-                  <MdKeyboardArrowUp />
-                ) : (
                   <MdKeyboardArrowDown />
+                ) : (
+                  <MdKeyboardArrowUp />
                 )}
               </button>
             </th>
@@ -115,9 +115,9 @@ export const UserTable = ({ userIdProps }: IUserTableProps) => {
               <h4>Status</h4>
               <button>
                 {sortedCheckinsStatus ? (
-                  <MdKeyboardArrowUp />
-                ) : (
                   <MdKeyboardArrowDown />
+                ) : (
+                  <MdKeyboardArrowUp />
                 )}
               </button>
             </th>
