@@ -13,6 +13,10 @@ import {
 import { useAuthContext } from "../../../context/AuthContext";
 import defaultUser from "../../../assets/defaultUser.svg";
 
+interface IImpediments {
+  impediments: boolean;
+}
+
 export const StudentsTable = () => {
   const [studentsList, setStudentsList] = useState<IGetStudentsResponse[] | []>(
     []
@@ -21,6 +25,8 @@ export const StudentsTable = () => {
   const [studentDelete, setStudentDelete] =
     useState<IRegisterCheckInStudentsProps | null>(null);
   const [isAddModal, setIsAddModal] = useState(false);
+  const [sortedImpediments, setSortedImpediments] = useState(true);
+  const [sortedsGrades, setSortedGrades] = useState(true);
 
   function handleClick(student: IRegisterCheckInStudentsProps) {
     setIsDeleteModal(true);
@@ -36,6 +42,38 @@ export const StudentsTable = () => {
     };
     listStudents();
   }, []);
+
+  const sortingImpediments = async () => {
+    const students = await getStudents(user.userId);
+    const studentsSorted = students.sort(sortCallbackImpediments);
+    setStudentsList(studentsSorted)
+  };
+
+  const sortCallbackImpediments = (a: IImpediments, b: IImpediments) => {
+    if (sortedImpediments) {
+      setSortedImpediments(false);
+      setSortedGrades(false);
+
+      if (a.impediments > b.impediments && a.impediments >= b.impediments) {
+        return -1;
+      }
+      if (a.impediments < b.impediments && a.impediments <= b.impediments) {
+        return 1;
+      }
+      return 0;
+    } else {
+      setSortedImpediments(true);
+      setSortedGrades(false);
+
+      if (a.impediments < b.impediments && a.impediments <= b.impediments) {
+        return -1;
+      }
+      if (a.impediments > b.impediments && a.impediments >= b.impediments) {
+        return 1;
+      }
+      return 0;
+    }
+  };
 
   return (
     <>

@@ -56,7 +56,7 @@ export const TrainerTable = ({ userIdProps }: ITrainerTableProps) => {
     setStudentsCheckin(sorting);
   };
 
-  function sortCallbackStatus(a: IDatesStatus, b: IDatesStatus) {
+  const sortCallbackStatus = (a: IDatesStatus, b: IDatesStatus) => {
     if (sortedCheckinsStatus) {
       setSortedCheckinsStatus(false);
       setSortedCheckinsDate(false);
@@ -79,7 +79,7 @@ export const TrainerTable = ({ userIdProps }: ITrainerTableProps) => {
       }
       return 0;
     }
-  }
+  };
   const sortingStatus = () => {
     const sorting = studentsCheckin.sort(sortCallbackStatus);
     setStudentsCheckin(sorting);
