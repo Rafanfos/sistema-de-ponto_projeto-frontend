@@ -27,7 +27,7 @@ export interface ICheckInStudentResponse {
   year: number;
   status: string;
   impediments: boolean;
-  currentTask: string | null;
+  currentTask: string;
   id: number;
   userId: number;
 }

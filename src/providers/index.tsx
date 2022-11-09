@@ -1,12 +1,19 @@
 import { ReactNode } from "react";
-import UserProviders from "../context/UserContext";
+import { AuthProviders } from "../context/AuthContext";
+import UserProviders from "../context/CheckinContext";
 
 export interface IProvidersProps {
   children: ReactNode;
 }
 
 const Providers = ({ children }: IProvidersProps) => {
-  return <UserProviders>{children}</UserProviders>;
+  return (
+    <>
+      <AuthProviders>
+        <UserProviders>{children}</UserProviders>
+      </AuthProviders>
+    </>
+  );
 };
 
 export default Providers;

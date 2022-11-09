@@ -1,15 +1,16 @@
-import { useContext } from "react";
 import { BsBoxSeam, BsGear } from "react-icons/bs";
 import { MdSignalCellularAlt } from "react-icons/md";
 import { IoExitOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
+import { useCheckinContext } from "../../context/CheckinContext";
 import { AsideStyle } from "./style";
+import { useAuthContext } from "../../context/AuthContext";
+import defaultUser from "../../assets/defaultUser.svg";
 
 export const AsideBar = () => {
-  const { userAvatar, isTrainer } = useContext(UserContext);
+  const { isTrainer } = useCheckinContext();
+  const { user } = useAuthContext();
   const navigate = useNavigate();
-
   const logoutUser = () => {
     localStorage.clear();
     navigate("/");
@@ -18,7 +19,10 @@ export const AsideBar = () => {
   return (
     <AsideStyle>
       <figure>
-        <img src={userAvatar} alt="Avatar do Usuário" />
+        <img
+          src={user.avatar ? user.avatar : defaultUser}
+          alt="Avatar do Usuário"
+        />
       </figure>
 
       <nav>

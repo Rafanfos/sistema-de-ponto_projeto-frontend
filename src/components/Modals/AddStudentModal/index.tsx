@@ -4,19 +4,21 @@ import * as yup from "yup";
 import { AddStudentModalStyle } from "./style";
 import {
   IAddStudentProps,
-  IRegisterCheckInStudentsProps,
-} from "../../services/api/trainer/interfaces";
+  IGetStudentsResponse,
+} from "../../../services/api/trainer/interfaces";
 import {
   addStudent,
   getCheckInStudents,
   getStudents,
-} from "../../services/api/trainer/requests";
+} from "../../../services/api/trainer/requests";
 import { toast } from "react-toastify";
+import { getStudentInfo } from "../../../services/api/students/requests";
+import { getCheckinPoints } from "../../../services/api/commom/requests";
 
 interface IAddStudentModal {
   setIsAddModal: React.Dispatch<React.SetStateAction<boolean>>;
   setStudentsList: React.Dispatch<
-    React.SetStateAction<[] | IRegisterCheckInStudentsProps[]>
+    React.SetStateAction<[] | IGetStudentsResponse[]>
   >;
 }
 
@@ -40,6 +42,17 @@ export const AddStudentModal = ({
 
   async function handleSubmitFunction(data: IAddStudentProps) {
     const listCheckIn = await getCheckInStudents(data.studentId);
+    const studentInfo = await getStudentInfo(data.studentId);
+
+    const checkinPoints = await getCheckinPoints(data.studentId);
+    const attendCheckinPoints = checkinPoints.filter(
+      ({ status }) => status === "attend"
+    );
+
+    const percentage = `${(
+      (attendCheckinPoints.length / checkinPoints.length) *
+      100
+    ).toFixed(1)}`;
 
     const lastRegister = listCheckIn[listCheckIn.length - 1];
 
@@ -49,13 +62,17 @@ export const AddStudentModal = ({
       impediments: false,
       userId: 2,
       id: data.studentId,
+      avatar: studentInfo[0].avatar || "",
+      currentTask: "",
+      percentage: "100",
     };
 
     if (lastRegister) {
-      const { day, month, year, schedule } = lastRegister;
+      const { day, month, year, schedule, currentTask, impediments } =
+        lastRegister;
       const lastRegisterDate = `${schedule} | ${day}/${month}/${year}`;
-
-      const lastRegisterImp = lastRegister.impediments;
+      const lastActivity = currentTask;
+      const lastRegisterImp = impediments;
 
       newData = {
         ...data,
@@ -63,6 +80,9 @@ export const AddStudentModal = ({
         impediments: lastRegisterImp,
         userId: 2,
         id: data.studentId,
+        avatar: studentInfo[0].avatar || "",
+        currentTask: lastActivity,
+        percentage: percentage,
       };
     }
 

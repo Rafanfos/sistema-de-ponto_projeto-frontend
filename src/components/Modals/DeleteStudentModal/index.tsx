@@ -1,16 +1,19 @@
 import { toast } from "react-toastify";
-import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
+import {
+  IGetStudentsResponse,
+  IRegisterCheckInStudentsProps,
+} from "../../../services/api/trainer/interfaces";
 import {
   deleteStudent,
   getStudents,
-} from "../../services/api/trainer/requests";
+} from "../../../services/api/trainer/requests";
 import { DeleteStudentModalStyle } from "./style";
 
 interface IDeleStudentModalProps {
   setIsDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
   studentDelete: null | IRegisterCheckInStudentsProps;
   setStudentsList: React.Dispatch<
-    React.SetStateAction<[] | IRegisterCheckInStudentsProps[]>
+    React.SetStateAction<[] | IGetStudentsResponse[]>
   >;
 }
 export const DeleteStudentModal = ({

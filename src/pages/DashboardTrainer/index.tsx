@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
 import { HeaderDashboard } from "../../components/HeaderDashboard";
-import { StudentsTable } from "../../components/StudentsTable";
-import { UserContext } from "../../context/UserContext";
+import { StudentsTable } from "../../components/Tables/StudentsTable";
+import { useCheckinContext } from "../../context/CheckinContext";
 import { DashboardTrainerStyle } from "./style";
 
 export const DashboardTrainer = () => {
@@ -14,7 +14,7 @@ export const DashboardTrainer = () => {
     checkinSchedule,
     setCheckinSchedule,
     setIsTrainer,
-  } = useContext(UserContext);
+  } = useCheckinContext();
 
   useEffect(() => {
     setCheckinSchedule({ start: "09:00", end: "21:00" });
@@ -30,7 +30,7 @@ export const DashboardTrainer = () => {
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
       const time = date.getHours() * 60 + date.getMinutes();
-      let difference = 0;
+
       if (checkinSchedule.start && checkinSchedule.end) {
         const { start, end } = checkinSchedule;
         const checkinHour = +start.slice(0, 2);
@@ -38,10 +38,8 @@ export const DashboardTrainer = () => {
         const checkinTime = checkinHour * 60;
         const checkoutTime = checkoutHour * 60;
         if (time >= checkinTime && time < checkoutTime) {
-          difference = time - checkinTime;
-          checkinVerification(difference);
+          checkinVerification(day, month, year);
         } else {
-          difference = time - checkoutTime;
           checkoutVerification(day, month, year);
         }
       }

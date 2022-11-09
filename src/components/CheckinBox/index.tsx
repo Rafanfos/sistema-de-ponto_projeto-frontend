@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { IUser, useAuthContext } from "../../context/AuthContext";
-import { UserContext } from "../../context/UserContext";
+import { useCheckinContext } from "../../context/CheckinContext";
 import api from "../../services/api/api";
 import { registerPoint } from "../../services/api/commom/requests";
 import { checkInStudent } from "../../services/api/students/requests";
@@ -24,16 +24,16 @@ export const CheckinBox = () => {
     checkinSchedule,
     showModal,
     setShowModal,
-  } = useContext(UserContext);
+  } = useCheckinContext();
 
-  const {user} = useAuthContext()
-  
+  const { user } = useAuthContext();
+
   const [statusCheckin, setStatusCheckin] = useState("");
 
   const { start, end } = checkinSchedule;
 
   const checkin = async (info: IUser, data: IData) => {
-    const {userId,name} = user;
+    const { userId, name } = user;
 
     const date = new Date();
     const day = Number(date.getDate());
@@ -121,7 +121,6 @@ export const CheckinBox = () => {
       };
       await registerPoint(data);
     }
-
   };
   return (
     <CheckinBoxStyle>

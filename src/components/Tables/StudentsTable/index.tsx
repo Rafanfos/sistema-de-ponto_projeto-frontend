@@ -1,19 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { VscCircleLargeOutline } from "react-icons/vsc";
 import { FiTrash2 } from "react-icons/fi";
-import { getStudents } from "../../services/api/trainer/requests";
+import { getStudents } from "../../../services/api/trainer/requests";
 import { ContainerStudentsStyle, StudentsTableStyle } from "./style";
-import { DeleteStudentModal } from "../DeleteStudentModal";
-import { AddStudentModal } from "../AddStudentModal";
-import { IRegisterCheckInStudentsProps } from "../../services/api/trainer/interfaces";
-import { useAuthContext } from "../../context/AuthContext";
+import { DeleteStudentModal } from "../../Modals/DeleteStudentModal";
+import { AddStudentModal } from "../../Modals/AddStudentModal";
+import {
+  IGetStudentsResponse,
+  IRegisterCheckInStudentsProps,
+} from "../../../services/api/trainer/interfaces";
+import { useAuthContext } from "../../../context/AuthContext";
+import defaultUser from "../../../assets/defaultUser.svg";
 
 export const StudentsTable = () => {
-  const [studentsList, setStudentsList] = useState<
-    IRegisterCheckInStudentsProps[] | []
-  >([]);
+  const [studentsList, setStudentsList] = useState<IGetStudentsResponse[] | []>(
+    []
+  );
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [studentDelete, setStudentDelete] =
     useState<IRegisterCheckInStudentsProps | null>(null);
@@ -24,7 +27,7 @@ export const StudentsTable = () => {
     setStudentDelete(student);
   }
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   useEffect(() => {
     const listStudents = async () => {
@@ -72,6 +75,13 @@ export const StudentsTable = () => {
               </th>
 
               <th>
+                <h4>Atividade atual</h4>
+                <button>
+                  <MdKeyboardArrowDown />
+                </button>
+              </th>
+
+              <th>
                 <h4>Impedimentos</h4>
                 <button>
                   <MdKeyboardArrowDown />
@@ -84,52 +94,59 @@ export const StudentsTable = () => {
                   <MdKeyboardArrowDown />
                 </button>
               </th>
-
-              <th>
-                <h4>Status</h4>
-                <button>
-                  <MdKeyboardArrowDown />
-                </button>
-              </th>
             </tr>
           </thead>
           <tbody>
             {studentsList &&
-              studentsList.map((student) => (
-                <tr key={student.id}>
-                  <td>
-                    <button onClick={() => handleClick(student)}>
-                      <FiTrash2 />
-                    </button>
-                    <VscCircleLargeOutline />
-                    <h3>{student.name}</h3>
-                  </td>
+              studentsList.map((student) => {
+                const {
+                  id,
+                  avatar,
+                  name,
+                  lastRegister,
+                  currentTask,
+                  impediments,
+                  percentage,
+                } = student;
+                return (
+                  <tr key={id}>
+                    <td>
+                      <button onClick={() => handleClick(student)}>
+                        <FiTrash2 />
+                      </button>
+                      <img
+                        src={avatar ? avatar : defaultUser}
+                        alt="Foto de perfil"
+                      />
+                      <h3>{name}</h3>
+                    </td>
 
-                  <td>
-                    <p>{student.lastRegister ? student.lastRegister : "N/A"}</p>
-                  </td>
+                    <td>
+                      <p>{lastRegister ? lastRegister : "N/A"}</p>
+                    </td>
 
-                  <td>
-                    <p
-                      className={
-                        student.impediments ? "somethingWrong" : "allRigth"
-                      }
-                    >
-                      {student.impediments
-                        ? "Com impedimentos"
-                        : "Sem Impedimentos"}
-                    </p>
-                  </td>
+                    <td>{currentTask}</td>
 
-                  <td>
-                    <p className="allRigth">100%</p>
-                  </td>
+                    <td>
+                      <p
+                        className={impediments ? "somethingWrong" : "allRigth"}
+                      >
+                        {impediments ? "Com impedimentos" : "Sem Impedimentos"}
+                      </p>
+                    </td>
 
-                  <td>
-                    <p className="allRigth">Conforme</p>
-                  </td>
-                </tr>
-              ))}
+                    <td>
+                      <p
+                        className={
+                          +percentage >= 80 ? "allRigth" : "somethingWrong"
+                        }
+                      >
+                        {percentage.replace(".", ",")}%
+                      </p>
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </StudentsTableStyle>

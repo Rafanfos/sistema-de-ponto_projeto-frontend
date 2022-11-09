@@ -1,12 +1,19 @@
 import {
-  ICheckInStudentProps,
-  ICheckInStudentResponse,
   IEditStudentInfoProps,
   IGetStudentInfoResponse,
 } from "../students/interfaces";
 
-export interface ICheckInTrainerProps extends ICheckInStudentProps {}
-export interface ICheckInTrainerResponse extends ICheckInStudentResponse {}
+export interface ICheckInTrainerProps {
+  name: string;
+  schedule: string;
+  day: number;
+  month: number;
+  year: number;
+  status: string;
+  impediments: boolean | null;
+  currentTask: string | null;
+}
+export interface ICheckInTrainerResponse extends ICheckInTrainerProps {}
 
 export interface IAddStudentProps {
   email: string;
@@ -15,6 +22,8 @@ export interface IAddStudentProps {
   studentId: number;
   lastRegister: string;
   impediments: boolean;
+  currentTask: string;
+  percentage: string;
 }
 
 export interface IAddStudentResponse {
@@ -26,9 +35,16 @@ export interface IAddStudentResponse {
 }
 
 export interface IGetStudentsResponse {
+  studentId: number;
   email: string;
   name: string;
-  course_module: string;
+  lastRegister: string;
+  impediments: boolean;
+  userId: number;
+  id: number;
+  avatar?: string;
+  percentage: string;
+  currentTask: string;
 }
 
 export interface IAddStudentResponse {
@@ -45,6 +61,7 @@ export interface IGetStudentsResponse {
   id: number;
   studentId: number;
   userId: number;
+  avatar?: string;
 }
 
 export interface IRegisterCheckInStudentsProps {
@@ -53,6 +70,7 @@ export interface IRegisterCheckInStudentsProps {
   studentId: number;
   lastRegister?: string;
   impediments?: boolean;
+  avatar?: string;
 }
 
 export interface IGetTrainerInfoResponse extends IGetStudentInfoResponse {}

@@ -58,6 +58,11 @@ export const StudentsTableStyle = styled.div`
   }
 
   table {
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
     thead {
       tr {
         display: flex;

@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { AsideBar } from "../../components/AsideBarNavigation";
 import { CheckinBox } from "../../components/CheckinBox";
 import { HeaderDashboard } from "../../components/HeaderDashboard";
 import { StudentAttendance } from "../../components/StudentAttendance";
-import { UserTable } from "../../components/UserTable";
-import { UserContext } from "../../context/UserContext";
+import { UserTable } from "../../components/Tables/UserTable";
+import { useCheckinContext } from "../../context/CheckinContext";
 import { DashboardStudentStyle } from "./style";
 
 export const DashboardStudent = () => {
@@ -15,7 +15,7 @@ export const DashboardStudent = () => {
     checkinSchedule,
     setCheckinSchedule,
     setIsTrainer,
-  } = useContext(UserContext);
+  } = useCheckinContext();
   const userId = Number(localStorage.getItem("@userId:SistemaDePontos"));
 
   useEffect(() => {
@@ -28,11 +28,10 @@ export const DashboardStudent = () => {
       setIsTrainer(false);
 
       const date = new Date();
-      const day = date.getDay();
-      const month = date.getMonth();
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
       const year = date.getFullYear();
       const time = date.getHours() * 60 + date.getMinutes();
-      let difference = 0;
 
       if (checkinSchedule.start && checkinSchedule.end) {
         const { start, end } = checkinSchedule;
@@ -41,10 +40,8 @@ export const DashboardStudent = () => {
         const checkinTime = checkinHour * 60;
         const checkoutTime = checkoutHour * 60;
         if (time >= checkinTime && time < checkoutTime) {
-          difference = time - checkinTime;
-          checkinVerification(difference);
+          checkinVerification(day, month, year);
         } else {
-          difference = time - checkoutTime;
           checkoutVerification(day, month, year);
         }
       }
