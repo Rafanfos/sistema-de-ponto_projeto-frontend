@@ -46,9 +46,9 @@ export const RegistersTrainerStyle = styled.main`
     text-align: center;
     max-width: 480px;
     margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    h3{
+      margin-bottom: 10px;
+    }
   }
 
   .filter__students {

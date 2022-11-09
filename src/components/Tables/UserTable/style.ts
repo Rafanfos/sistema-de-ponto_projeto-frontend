@@ -19,6 +19,7 @@ export const UserTableStyle = styled.div`
     width: 100%;
     max-width: 727px;
     margin: 0 auto;
+    margin-top: 20px;
     thead {
       width: 100%;
       tr {
