@@ -7,6 +7,7 @@ import {
   deleteStudent,
   getStudents,
 } from "../../../services/api/trainer/requests";
+import { StyledModalAnimation } from "../animations/styled";
 import { DeleteStudentModalStyle } from "./style";
 
 interface IDeleStudentModalProps {
@@ -38,7 +39,7 @@ export const DeleteStudentModal = ({
   }
   return (
     <DeleteStudentModalStyle>
-      <div className="containerDeleModal">
+      <StyledModalAnimation className="containerDeleModal">
         <h2>Deseja realmente excluir este aluno?</h2>
 
         <div>
@@ -49,7 +50,7 @@ export const DeleteStudentModal = ({
             Cancelar
           </button>
         </div>
-      </div>
+      </StyledModalAnimation>
     </DeleteStudentModalStyle>
   );
 };

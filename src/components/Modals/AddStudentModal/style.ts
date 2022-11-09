@@ -20,6 +20,7 @@ export const AddStudentModalStyle = styled.div`
 
     background-color: var(--grey-4);
     border-radius: 5px;
+    
 
     h2 {
       width: 90%;
@@ -152,5 +153,6 @@ export const AddStudentModalStyle = styled.div`
         }
       }
     }
+    
   }
 `;
