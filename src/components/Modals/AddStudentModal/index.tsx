@@ -14,6 +14,7 @@ import {
 import { toast } from "react-toastify";
 import { getStudentInfo } from "../../../services/api/students/requests";
 import { getCheckinPoints } from "../../../services/api/commom/requests";
+import { StyledModalAnimation } from "../animations/styled";
 
 interface IAddStudentModal {
   setIsAddModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,7 +26,7 @@ interface IAddStudentModal {
 const schemaAddStudent = yup.object({
   name: yup.string().required("Nome obrigatório"),
   email: yup.string().required("Email obrigatório").email("Email inválido"),
-  studentId: yup.number().required("ID obrigatório"),
+  studentId: yup.string().required("ID obrigatório"),
 });
 
 export const AddStudentModal = ({
@@ -100,7 +101,7 @@ export const AddStudentModal = ({
 
   return (
     <AddStudentModalStyle>
-      <div className="containerAddModal">
+      <StyledModalAnimation className="containerAddModal">
         <h2>Adicionando um novo aluno</h2>
         <form onSubmit={handleSubmit(handleSubmitFunction)}>
           <div>
@@ -133,7 +134,7 @@ export const AddStudentModal = ({
               placeholder="ID do aluno..."
               {...register("studentId")}
             />
-            <span>{errors.email?.message}</span>
+            <span>{errors.studentId?.message}</span>
           </div>
 
           <div className="btns">
@@ -149,7 +150,7 @@ export const AddStudentModal = ({
             </button>
           </div>
         </form>
-      </div>
+      </StyledModalAnimation>
     </AddStudentModalStyle>
   );
 };

@@ -5,7 +5,6 @@ export const ContainerStudentsStyle = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 5px;
-
   h2 {
     color: var(--grey-1);
     font-weight: 700;
@@ -45,12 +44,12 @@ export const ContainerStudentsStyle = styled.div`
 
 export const StudentsTableStyle = styled.div`
   margin-top: 1.875rem;
-
   .table__container {
     overflow-x: auto;
   }
 
   table {
+    padding-bottom: 8px;
     img {
       height: 60%;
       border-radius: 50%;

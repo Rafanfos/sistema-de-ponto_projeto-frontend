@@ -17,7 +17,7 @@ export const DashboardTrainer = () => {
   } = useCheckinContext();
 
   useEffect(() => {
-    setCheckinSchedule({ start: "09:00", end: "21:00" });
+    setCheckinSchedule({ start: "09:00", end: "18:00" });
   }, []);
 
   useEffect(() => {

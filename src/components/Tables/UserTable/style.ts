@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const UserTableStyle = styled.div`
-  margin-top: 1.5rem;
   overflow-x: auto;
   max-width: 480px;
   width: 100%;
@@ -20,6 +19,7 @@ export const UserTableStyle = styled.div`
     width: 100%;
     max-width: 727px;
     margin: 0 auto;
+    margin-top: 20px;
     thead {
       width: 100%;
       tr {

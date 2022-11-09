@@ -30,6 +30,9 @@ export default createGlobalStyle`
   }
   button {
     cursor: pointer;
+    &:disabled{
+      cursor: not-allowed;
+    }
   }
   input {
     outline: none;

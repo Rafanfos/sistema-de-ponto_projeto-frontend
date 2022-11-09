@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { IData } from "../../CheckinBox";
 import { IUser, useAuthContext } from "../../../context/AuthContext";
 import { getCheckInStudent } from "../../../services/api/students/requests";
+import { StyledModalAnimation } from "../animations/styled";
 
 interface IModalCheckinProps {
   checkin: (info: IUser, data: IData) => Promise<void>;
@@ -48,7 +49,7 @@ const CheckinStudentModal = ({ checkin }: IModalCheckinProps) => {
 
   return (
     <CheckinStudentModalStyled>
-      <div>
+      <StyledModalAnimation>
         <h1>Olá dev, hora do checkin!</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="currentTask">
@@ -100,7 +101,7 @@ const CheckinStudentModal = ({ checkin }: IModalCheckinProps) => {
             </button>
           </div>
         </form>
-      </div>
+      </StyledModalAnimation>
     </CheckinStudentModalStyled>
   );
 };

@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { CiMail } from "react-icons/ci";
 import { FiKey } from "react-icons/fi";
-import { BsCheck, BsEye, BsEyeSlash } from "react-icons/bs";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IGetStudentInfoResponse } from "../../services/api/students/interfaces";
@@ -31,7 +31,6 @@ export interface ILoginForm {
 const Login = () => {
   const [viewPassword, setViewPassword] = useState(false);
   const [typeInputPassword, setTypeInputPassword] = useState("password");
-  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const { login_onSubmit: loginOnSubmit } = useAuthContext();
 
   const {
@@ -78,7 +77,7 @@ const Login = () => {
                   {errors.password ? `* ${errors.password.message}` : null}
                 </span>
               </div>
-              <button
+              <span className="password-icon"
                 onClick={(event) => {
                   event.preventDefault();
                   if (viewPassword === true) {
@@ -91,26 +90,13 @@ const Login = () => {
                 }}
               >
                 {viewPassword === false ? (
-                  <BsEye className="figure_view" />
-                ) : (
                   <BsEyeSlash className="figure_view" />
+                  ) : (
+                  <BsEye className="figure_view" />
                 )}
-              </button>
+              </span>
             </div>
-            <div className="div_keep_logged">
-              <div
-                onClick={() => {
-                  keepLoggedIn === true
-                    ? setKeepLoggedIn(false)
-                    : setKeepLoggedIn(true);
-                }}
-              >
-                {keepLoggedIn === true ? (
-                  <BsCheck className="figure_check" />
-                ) : null}
-              </div>
-              <p>Manter-me logado</p>
-            </div>
+            
             <button type="submit">Login</button>
           </form>
         </div>

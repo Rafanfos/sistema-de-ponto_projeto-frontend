@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const RegistersTrainerStyle = styled.main`
   padding-left: unset;
-
   .main__container {
     display: flex;
     flex-direction: column;
@@ -12,7 +11,8 @@ export const RegistersTrainerStyle = styled.main`
     gap: 20px;
     margin: 0 auto;
     align-items: center;
-
+    margin-top: 20px;
+    
     @media (min-width: 768px) {
       flex-direction: row;
       align-items: flex-start;
