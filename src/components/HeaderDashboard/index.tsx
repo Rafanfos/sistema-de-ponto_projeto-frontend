@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/UserContext";
+import { useEffect, useState } from "react";
+import { useAuthContext } from "../../context/AuthContext";
 import { HeaderDashboardStyle } from "./style";
 
 export const HeaderDashboard = () => {
-  const { userInfo } = useContext(UserContext);
+  const { user } = useAuthContext();
   const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
@@ -21,17 +21,16 @@ export const HeaderDashboard = () => {
 
   return (
     <HeaderDashboardStyle>
-      {userInfo &&
-        userInfo.map((user) => (
-          <div key={user.id}>
-            <h1>
-              Turma {user.class} - {user.course_module}
-            </h1>
+      {user && (
+        <div key={user.id}>
+          <h1>
+            Turma {user.class} - {user.course_module}
+          </h1>
 
-            <h2>Bem vindo {user.name}</h2>
-            <p>{currentDate}</p>
-          </div>
-        ))}
+          <h2>Bem vindo {user.name}</h2>
+          <p>{currentDate}</p>
+        </div>
+      )}
     </HeaderDashboardStyle>
   );
 };

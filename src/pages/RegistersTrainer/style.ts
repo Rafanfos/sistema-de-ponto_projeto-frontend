@@ -9,12 +9,13 @@ export const RegistersTrainerStyle = styled.main`
     justify-content: center;
     width: 90%;
     max-width: 1000px;
-    gap: 12px;
+    gap: 20px;
     margin: 0 auto;
     align-items: center;
 
     @media (min-width: 768px) {
       flex-direction: row;
+      align-items: flex-start;
     }
   }
 

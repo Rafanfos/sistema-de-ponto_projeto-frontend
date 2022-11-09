@@ -2,6 +2,7 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
+  useContext,
   useEffect,
   useState,
 } from "react";
@@ -15,7 +16,7 @@ import {
   getTrainerInfo,
 } from "../../services/api/trainer/requests";
 
-export interface IUserContextData {
+export interface ICheckinContextData {
   checkinSchedule: ICheckinData;
   setCheckinSchedule: Dispatch<SetStateAction<ICheckinData>>;
   isTrainer: boolean;
@@ -30,7 +31,7 @@ export interface IUserContextData {
       checkout: boolean;
     }>
   >;
-  checkinVerification: (difference: number) => void;
+  checkinVerification: (day: number, month: number, year: number) => void;
   checkoutVerification: (day: number, month: number, year: number) => void;
   userInfo: IGetTrainerInfoResponse[];
   setUserInfo: Dispatch<SetStateAction<IGetTrainerInfoResponse[]>>;
@@ -51,10 +52,6 @@ export interface ICheckinData {
   end: string;
 }
 
-export const UserContext = createContext<IUserContextData>(
-  {} as IUserContextData
-);
-
 export interface IEditTrainerInfoProps {
   name?: string;
   oldEmail?: string;
@@ -63,7 +60,11 @@ export interface IEditTrainerInfoProps {
   avatar?: any;
 }
 
-const UserProviders = ({ children }: IProvidersProps) => {
+export const CheckinContext = createContext<ICheckinContextData>(
+  {} as ICheckinContextData
+);
+
+const CheckinProviders = ({ children }: IProvidersProps) => {
   const [checkinSchedule, setCheckinSchedule] = useState<ICheckinData>(
     {} as ICheckinData
   );
@@ -73,7 +74,6 @@ const UserProviders = ({ children }: IProvidersProps) => {
     checkout: true,
   });
   const [userInfo, setUserInfo] = useState<IGetTrainerInfoResponse[]>([]);
-  const toleranceMin = 20;
   const [showModal, setShowModal] = useState(false);
   const [userAvatar, setUserAvatar] = useState<string | undefined>(undefined);
   const [myCheckins, setMyCheckins] = useState<ICheckInStudentResponse[]>([]);
@@ -81,10 +81,18 @@ const UserProviders = ({ children }: IProvidersProps) => {
     ICheckInStudentResponse[]
   >([]);
 
-  const checkinVerification = (difference: number) => {
-    if (difference < toleranceMin) {
-      setIsDisable({ ...isDisable, checkin: false });
-    }
+  const checkinVerification = async (
+    day: number,
+    month: number,
+    year: number
+  ) => {
+    const userId = localStorage.getItem("@userId:SistemaDePontos") || "";
+    const token = localStorage.getItem("@token:SistemaDePontos");
+    api.defaults.headers.authorization = `Bearer ${token}`;
+    const checkin = await getCheckInStudents(+userId, day, month, year);
+    checkin.length
+      ? setIsDisable({ checkin: true, checkout: true })
+      : setIsDisable({ checkin: false, checkout: true });
   };
 
   const checkoutVerification = async (
@@ -129,7 +137,7 @@ const UserProviders = ({ children }: IProvidersProps) => {
   };
 
   return (
-    <UserContext.Provider
+    <CheckinContext.Provider
       value={{
         checkinSchedule,
         setCheckinSchedule,
@@ -154,8 +162,14 @@ const UserProviders = ({ children }: IProvidersProps) => {
       }}
     >
       {children}
-    </UserContext.Provider>
+    </CheckinContext.Provider>
   );
 };
 
-export default UserProviders;
+export default CheckinProviders;
+
+export const useCheckinContext = () => {
+  const context = useContext(CheckinContext);
+
+  return context;
+};

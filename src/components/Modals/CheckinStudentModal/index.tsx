@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../context/UserContext";
+import { useEffect, useState } from "react";
+import { useCheckinContext } from "../../../context/CheckinContext";
 import { CheckinStudentModalStyled } from "./style";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IData } from "../../CheckinBox";
 import { IUser, useAuthContext } from "../../../context/AuthContext";
+import { getCheckInStudent } from "../../../services/api/students/requests";
 
 interface IModalCheckinProps {
   checkin: (info: IUser, data: IData) => Promise<void>;
@@ -17,7 +18,7 @@ const formSchema = yup.object().shape({
 
 const CheckinStudentModal = ({ checkin }: IModalCheckinProps) => {
   const { user } = useAuthContext();
-  const { setShowModal } = useContext(UserContext);
+  const { setShowModal, setMyCheckins } = useCheckinContext();
   const [isDisable, setIsDisable] = useState(true);
   const [impediment, setImpediment] = useState("");
 
@@ -30,12 +31,15 @@ const CheckinStudentModal = ({ checkin }: IModalCheckinProps) => {
   });
 
   const onSubmit = async (dataInput: IData) => {
+    const userId = localStorage.getItem("@userId:SistemaDePontos") || "";
     dataInput = {
       ...dataInput,
       impediments: impediment === "yes" ? true : false,
     };
-
-    checkin(user, dataInput);
+    await checkin(user, dataInput);
+    const data = await getCheckInStudent(+userId);
+    setMyCheckins(data);
+    setShowModal(false);
   };
 
   useEffect(() => {

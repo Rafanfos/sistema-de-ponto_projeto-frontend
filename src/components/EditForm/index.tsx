@@ -5,7 +5,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { IEditTrainerInfoProps } from "../../services/api/trainer/interfaces";
 import { toast } from "react-toastify";
 import { useContext } from "react";
-import { UserContext } from "../../context/UserContext";
+import { useCheckinContext } from "../../context/CheckinContext";
+import { AuthContext } from "../../context/AuthContext";
+import { getStudentInfo } from "../../services/api/students/requests";
+import defaultUser from "../../assets/defaultUser.svg";
 
 const schema = yup.object().shape(
   {
@@ -40,8 +43,8 @@ const schema = yup.object().shape(
 );
 
 export const EditForm = () => {
-  const { userInfo, editUserInfo, userAvatar, setUserAvatar } =
-    useContext(UserContext);
+  const { editUserInfo, userAvatar, setUserAvatar } = useCheckinContext();
+  const { user, setUser } = useContext(AuthContext);
 
   const {
     register,
@@ -88,20 +91,22 @@ export const EditForm = () => {
     }
   };
 
-  const editInfoAccount = (data: IEditTrainerInfoProps) => {
+  const editInfoAccount = async (data: IEditTrainerInfoProps) => {
     const { name, email, oldEmail } = data;
 
     const treatedObject = {
-      name: name !== "" ? name : userInfo[0]?.name,
-      email: email !== "" ? email : userInfo[0]?.email,
-      avatar: userAvatar ? userAvatar : userInfo[0]?.avatar,
+      name: name !== "" ? name : user?.name,
+      email: email !== "" ? email : user?.email,
+      avatar: userAvatar ? userAvatar : user?.avatar,
     };
 
-    if (oldEmail !== userInfo[0]?.email && oldEmail !== "") {
+    if (oldEmail !== user?.email && oldEmail !== "") {
       toast.error("E-mail antigo incorreto");
     } else {
-      editUserInfo(treatedObject);
+      await editUserInfo(treatedObject);
+      const userInfo = await getStudentInfo(+user.id);
       setUserAvatar(userAvatar);
+      setUser(userInfo[0]);
     }
     reset();
   };
@@ -150,7 +155,10 @@ export const EditForm = () => {
               {...register("avatar")}
               disabled={convertToBase64()}
             />
-            <img src={userAvatar} alt="Imagem do Kirby" />
+            <img
+              src={user.avatar ? user.avatar : defaultUser}
+              alt="Imagem do Kirby"
+            />
           </div>
         </div>
 

@@ -45,19 +45,16 @@ export const ContainerStudentsStyle = styled.div`
 
 export const StudentsTableStyle = styled.div`
   margin-top: 1.875rem;
-  overflow-x: auto;
 
-  &::-webkit-scrollbar {
-    height: 8px;
-    background-color: var(--grey-3);
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--grey-2);
-    border-radius: 8px;
+  .table__container {
+    overflow-x: auto;
   }
 
   table {
+    img {
+      height: 60%;
+      border-radius: 50%;
+    }
     thead {
       tr {
         display: flex;
@@ -102,6 +99,15 @@ export const StudentsTableStyle = styled.div`
           }
         }
       }
+      &::-webkit-scrollbar {
+        height: 8px;
+        background-color: var(--grey-3);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: var(--grey-2);
+        border-radius: 8px;
+      }
     }
 
     tbody {
@@ -114,7 +120,6 @@ export const StudentsTableStyle = styled.div`
           display: flex;
           align-items: center;
           justify-content: center;
-
           svg {
             color: var(--grey-2);
           }
