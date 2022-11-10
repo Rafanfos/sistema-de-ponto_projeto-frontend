@@ -26,7 +26,7 @@ export const StudentAttendance = () => {
         <div className="total">
           <div className="current"></div>
         </div>
-        <span>{`${!isNaN(+percentage) ? percentage : 100}%`}</span>
+        <span>{`${!isNaN(+percentage) ? (+percentage).toFixed(1) : 100}%`}</span>
       </div>
     </PercentageDivStyle>
   );
