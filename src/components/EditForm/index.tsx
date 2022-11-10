@@ -44,7 +44,7 @@ const schema = yup.object().shape(
 
 export const EditForm = () => {
   const { editUserInfo, userAvatar, setUserAvatar } = useCheckinContext();
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, setNewAvatar } = useContext(AuthContext);
 
   const {
     register,
@@ -105,8 +105,8 @@ export const EditForm = () => {
     } else {
       await editUserInfo(treatedObject);
       const userInfo = await getStudentInfo(+user.id);
-      setUserAvatar(userAvatar);
       setUser(userInfo[0]);
+      setNewAvatar(userAvatar);
     }
     reset();
   };
@@ -156,7 +156,7 @@ export const EditForm = () => {
               disabled={convertToBase64()}
             />
             <img
-              src={user.avatar ? user.avatar : defaultUser}
+              src={userAvatar ? userAvatar : defaultUser}
               alt="Imagem do Kirby"
             />
           </div>

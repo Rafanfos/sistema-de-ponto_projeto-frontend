@@ -36,7 +36,8 @@ export const checkInStudent = async (
 export const editStudentInfo = async (
   id: number,
   dataInput: IEditStudentInfoProps
-): Promise<void> => {
-  const { data } = await api.patch<void>(`users/${id}`, dataInput);
+) => {
+  const { data } = await api.patch(`users/${id}`, dataInput);
+  console.log(data);
   return data;
 };
