@@ -42,9 +42,8 @@ export const CheckinBox = () => {
     let hours = String(date.getHours());
     let minutes = String(date.getMinutes());
     let checkinHour = +start.slice(0, 2);
-    let checkoutHour = 18;
-    //+end.slice(0, 2);
-    let toleranceMin = 20;
+    let checkoutHour = +end.slice(0, 2);
+    let toleranceMin = 15;
 
     if (hours.length === 1) {
       hours = `0${hours}`;

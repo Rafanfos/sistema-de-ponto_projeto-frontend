@@ -21,6 +21,8 @@ interface IAuthProviderExports {
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
   login_onSubmit: (data: IUser) => void;
+  newAvatar: string | undefined;
+  setNewAvatar: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export interface IUser {
@@ -43,6 +45,8 @@ interface ILoginPost {
 export const AuthProviders = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<IUser>({} as IUser);
   const [loading, setLoading] = useState(true);
+  const [newAvatar, setNewAvatar] = useState<string | undefined>("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,6 +58,7 @@ export const AuthProviders = ({ children }: { children: ReactNode }) => {
           api.defaults.headers.authorization = `Bearer ${token}`;
           const { data } = await api.get<IUser[]>(`users?id=${userId}`);
           setUser(data[0]);
+          setNewAvatar(data[0].avatar);
           if (data[0].is_trainer) {
             navigate("/dashboard_instrutor");
           } else {
@@ -82,6 +87,7 @@ export const AuthProviders = ({ children }: { children: ReactNode }) => {
 
       api.defaults.headers.authorization = `Bearer ${response.data.accessToken}`;
       setUser(response.data.user);
+      setNewAvatar(response.data.user.avatar);
       toast.success("Login confirmado", {
         position: "top-right",
         hideProgressBar: false,
@@ -117,6 +123,8 @@ export const AuthProviders = ({ children }: { children: ReactNode }) => {
         loading,
         setLoading,
         login_onSubmit,
+        newAvatar,
+        setNewAvatar,
       }}
     >
       {children}
