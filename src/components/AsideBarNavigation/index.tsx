@@ -9,7 +9,7 @@ import defaultUser from "../../assets/defaultUser.svg";
 
 export const AsideBar = () => {
   const { isTrainer } = useCheckinContext();
-  const { user } = useAuthContext();
+  const { newAvatar } = useAuthContext();
   const navigate = useNavigate();
   const logoutUser = () => {
     localStorage.clear();
@@ -20,7 +20,7 @@ export const AsideBar = () => {
     <AsideStyle>
       <figure>
         <img
-          src={user.avatar ? user.avatar : defaultUser}
+          src={newAvatar ? newAvatar : defaultUser}
           alt="Avatar do Usuário"
         />
       </figure>
