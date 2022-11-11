@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
+import { getStudentInfo } from "../../services/api/students/requests";
 import { HeaderDashboardStyle } from "./style";
 
 export const HeaderDashboard = () => {
-  const { user } = useAuthContext();
+  const { user, setUser } = useAuthContext();
   const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
@@ -15,8 +16,12 @@ export const HeaderDashboard = () => {
       });
       setCurrentDate(date);
     };
-
+    const upgradeUserInfo = async () => {
+      const userInfo = await getStudentInfo(+user.id);
+      setUser(userInfo[0]);
+    };
     getDate();
+    upgradeUserInfo();
   });
 
   return (
