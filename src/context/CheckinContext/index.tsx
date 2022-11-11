@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { IProvidersProps } from "../../providers";
 import api from "../../services/api/api";
 import { ICheckInStudentResponse } from "../../services/api/students/interfaces";
-import { IGetTrainerInfoResponse } from "../../services/api/trainer/interfaces";
 import {
   getCheckInStudents,
   getTrainerInfo,
@@ -33,8 +32,8 @@ export interface ICheckinContextData {
   >;
   checkinVerification: (day: number, month: number, year: number) => void;
   checkoutVerification: (day: number, month: number, year: number) => void;
-  userInfo: IGetTrainerInfoResponse[];
-  setUserInfo: Dispatch<SetStateAction<IGetTrainerInfoResponse[]>>;
+  // userInfo: IGetTrainerInfoResponse[];
+  // setUserInfo: Dispatch<SetStateAction<IGetTrainerInfoResponse[]>>;
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
   editUserInfo: (data: IEditTrainerInfoProps) => Promise<void>;
@@ -73,7 +72,7 @@ const CheckinProviders = ({ children }: IProvidersProps) => {
     checkin: true,
     checkout: true,
   });
-  const [userInfo, setUserInfo] = useState<IGetTrainerInfoResponse[]>([]);
+  // const [userInfo, setUserInfo] = useState<IGetTrainerInfoResponse[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [userAvatar, setUserAvatar] = useState<string | undefined>(undefined);
   const [myCheckins, setMyCheckins] = useState<ICheckInStudentResponse[]>([]);
@@ -117,7 +116,6 @@ const CheckinProviders = ({ children }: IProvidersProps) => {
 
     if (userId) {
       const info = await getTrainerInfo(userId);
-      setUserInfo(info);
       setUserAvatar(info[0].avatar);
     }
   };
@@ -147,8 +145,6 @@ const CheckinProviders = ({ children }: IProvidersProps) => {
         setIsDisable,
         checkinVerification,
         checkoutVerification,
-        userInfo,
-        setUserInfo,
         showModal,
         setShowModal,
         editUserInfo,

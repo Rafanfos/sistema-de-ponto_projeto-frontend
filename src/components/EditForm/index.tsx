@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { useContext } from "react";
 import { useCheckinContext } from "../../context/CheckinContext";
 import { AuthContext } from "../../context/AuthContext";
-import { getStudentInfo } from "../../services/api/students/requests";
 import defaultUser from "../../assets/defaultUser.svg";
 
 const schema = yup.object().shape(
@@ -44,7 +43,7 @@ const schema = yup.object().shape(
 
 export const EditForm = () => {
   const { editUserInfo, userAvatar, setUserAvatar } = useCheckinContext();
-  const { user, setUser, setNewAvatar } = useContext(AuthContext);
+  const { user, setNewAvatar } = useContext(AuthContext);
 
   const {
     register,
@@ -104,8 +103,8 @@ export const EditForm = () => {
       toast.error("E-mail antigo incorreto");
     } else {
       await editUserInfo(treatedObject);
-      const userInfo = await getStudentInfo(+user.id);
-      setUser(userInfo[0]);
+      // const userInfo = await getStudentInfo(+user.id);
+      // setUser(userInfo[0]);
       setNewAvatar(userAvatar);
     }
     reset();
