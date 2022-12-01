@@ -68,7 +68,7 @@ Inicialmente com a função de bater ponto é semelhante a do instrutor, porém 
 
 Uma tabela mostra o resgistro de todos os dias em que o alunor realizou checkin e checkout com os respetivos horários e status(atrasado ou conforme).
 
-** Com relação as funções da página de configurações e logout, o funcionamento se dá da mesma forma que para o instrutor. **
+**Com relação as funções da página de configurações e logout, o funcionamento se dá da mesma forma que para o instrutor.**
 
 
 
